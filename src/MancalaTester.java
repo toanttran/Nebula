@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -12,11 +14,15 @@ public class MancalaTester {
 	
 	public static void main(String[] args) {
 		
+		
+		final int FRAME_WIDTH = 500;
+		final int FRAME_HEIGHT = 300;
 		JFrame initialScreen = new JFrame("Game Setup");
 		JPanel panel = new JPanel();
 		JPanel buttonPanel = new JPanel();
 		JLabel direction = new JLabel("Select Board Style and Number of Stones");
 		JButton startGame = new JButton("Start Game");
+
 		
 		Font f = direction.getFont();
 		// bold
@@ -27,6 +33,16 @@ public class MancalaTester {
 
 		JComboBox chooseStoneNum = new JComboBox(stoneChoices);
 		JComboBox chooseBoardStyle = new JComboBox(boardChoices);
+		
+		startGame.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame frame = new MancalaView(chooseBoardStyle, chooseStoneNum, FRAME_WIDTH, FRAME_HEIGHT);
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			}
+			
+		});
 		
 		panel.add(direction);
 		buttonPanel.add(chooseBoardStyle);
