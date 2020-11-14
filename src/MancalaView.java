@@ -7,8 +7,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * @author toanmacbook
+ *
+ */
 public class MancalaView extends JFrame {
 	
+	/**
+	 * 
+	 * @param chooseBoardStyle
+	 * @param chooseStoneNum
+	 * @param width
+	 * @param height
+	 */
 	public MancalaView(JComboBox chooseBoardStyle, JComboBox chooseStoneNum, int width, int height) {
 		
 		JFrame frame = new JFrame("Mancala Game");
@@ -24,6 +36,8 @@ public class MancalaView extends JFrame {
 		//Buttons to layout
 		JButton undoButton = new JButton("Undo");
 		JButton doneButton = new JButton("Done");
+		
+		
 		JButton pitButtons = new JButton("pit");
 		JButton mancalaAButton = new JButton("A");
 		JButton mancalaBButton = new JButton("B");
