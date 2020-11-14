@@ -33,6 +33,7 @@ public class MancalaGameState {
 				mancalaBoard[i] = 0;
 		}
 		lastBoard = null;
+		currentPlayer = null;
 	}
 	
 	/**
@@ -42,6 +43,10 @@ public class MancalaGameState {
 	 * @param pos The Pit position from which to move the stones
 	 */
 	public void movePit(Pit pos) {
+		if(currentPlayer == null) {
+			currentPlayer = pos.getPlayer();
+		}
+		
 		if(isNotPlayerPit(pos.getValue())) {
 			int stonesTaken = mancalaBoard[pos.getValue()];
 			currentPlayer = pos.getPlayer();
@@ -79,10 +84,12 @@ public class MancalaGameState {
 	 * Switches the current player's turn to the other player
 	 */
 	public void changePlayers() {
-		if(currentPlayer.equals("A"))
-			currentPlayer = "B";
-		else if(currentPlayer.equals("B"))
-			currentPlayer = "A";
+		if(currentPlayer != null) {
+			if(currentPlayer.equals("A"))
+				currentPlayer = "B";
+			else if(currentPlayer.equals("B"))
+				currentPlayer = "A";
+		}
 	}
 	
 	/**
@@ -93,6 +100,7 @@ public class MancalaGameState {
 		viewers.add(c);
 	}
 	
+	// Calls stateChanged() for all viewers in this MancalaGameState
 	private void notifyViewers() {
 		for(ChangeListener cl : viewers) {
 			cl.stateChanged(new ChangeEvent(this));
