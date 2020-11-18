@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -21,7 +22,7 @@ public class MancalaView extends JFrame {
 	 * @param width
 	 * @param height
 	 */
-	public MancalaView(JComboBox chooseBoardStyle, JComboBox chooseStoneNum, int width, int height) {
+	public MancalaView(String boardStyle, String stoneNumber, int width, int height) {
 		
 		JFrame frame = new JFrame("Mancala Game");
 		frame.setSize(width, height);
@@ -42,6 +43,17 @@ public class MancalaView extends JFrame {
 		JButton mancalaAButton = new JButton("A");
 		JButton mancalaBButton = new JButton("B");
 		
+		BoardStyleManager board;
+		
+		if(boardStyle.equals("EarthBoard"))
+		{
+			
+		}
+		else if(boardStyle.equals("JupiterBoard"))
+		{
+			board = new JupiterBoardStyle();
+		}
+		
 		mancalaAPanel.add(mancalaAButton);
 		mancalaBPanel.add(mancalaBButton);
 		pitsPanel.add(pitButtons);
@@ -55,4 +67,5 @@ public class MancalaView extends JFrame {
 		frame.add(buttonPanel, BorderLayout.SOUTH);
 		frame.setVisible(true);
 	}
+	
 }

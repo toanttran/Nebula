@@ -10,6 +10,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * Acts as the initial screen for the whole application 
+ * @author Ye Sol, Toan
+ *
+ */
 public class MancalaTester {
 	
 	public static void main(String[] args) {
@@ -38,9 +43,14 @@ public class MancalaTester {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFrame frame = new MancalaView(chooseBoardStyle, chooseStoneNum, FRAME_WIDTH, FRAME_HEIGHT);
-				//need to close initialScreen after this button is activated.
+				String numberOfStones = chooseStoneNum.getSelectedItem().toString();
+				String boardStyle = chooseBoardStyle.getSelectedItem().toString();
+				
+				JFrame frame = new MancalaView(boardStyle, numberOfStones, FRAME_WIDTH, FRAME_HEIGHT);
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				
+				//need to close initialScreen after this button is activated.
+				initialScreen.dispose();
 			}
 			
 		});
