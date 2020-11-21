@@ -12,6 +12,7 @@ public class MancalaGameState {
 	private int[] mancalaBoard;
 	private int[] lastBoard;
 	private String currentPlayer;
+	private boolean gameEnd;
 	
 	private ArrayList<ChangeListener> viewers;
 	
@@ -27,7 +28,7 @@ public class MancalaGameState {
 	public MancalaGameState(int numOfStones) {
 		mancalaBoard = new int[BOARD_SIZE];
 		for(int i = 0; i < BOARD_SIZE; i++) {
-			if(isNotPlayerPit(i))
+			if(!isMancalaPit(i))
 				mancalaBoard[i] = numOfStones;
 			else
 				mancalaBoard[i] = 0;
@@ -39,33 +40,92 @@ public class MancalaGameState {
 	/**
 	 * Takes the stones in a specified Pit of the Mancala board
 	 * and adds one to each consecutive pit after the specified Pit
-	 * (in counter-clockwise motion).
+	 * (in counter-clockwise motion). If this is the first move in
+	 * the game, then the player that owns the selected Pit gains
+	 * sole control of the Mancala Board.
+	 * 
+	 * Will do nothing if the player picked their opponenet's Pit, or
+	 * if the specified Pit is either empty or a Mancala Pit 
+	 * of either player
+	 * 
 	 * @param pos The Pit position from which to move the stones
+	 * @return true if the last stone in this move is on the player's
+	 * Mancala Pit, or if the selected pit either is empty or
+	 * is a Mancala Pit; else, false
 	 */
-	public void movePit(Pit pos) {
+	public boolean movePit(Pit pos) {
+		// Do nothing if player chose a Mancala Pit
+		if(isMancalaPit(pos.getValue())) {
+			return true; // Should not consume a turn
+		}
+		
+		// Sets the player if this is the first turn
 		if(currentPlayer == null) {
 			currentPlayer = pos.getPlayer();
 		}
 		
-		if(isNotPlayerPit(pos.getValue())) {
+		// Check if the player picked their own Pit
+		if(currentPlayer.equals(pos.getPlayer())) {
 			int stonesTaken = mancalaBoard[pos.getValue()];
-			currentPlayer = pos.getPlayer();
 			
+			// Do nothing if the selected pit has no stones
+			if(stonesTaken <= 0) {
+				return true;
+			}
 			lastBoard = mancalaBoard.clone();
-			
+		
 			// Loops through the board until stones in hand are empty
-			int i = pos.getValue();
+			int i = pos.getValue() - 1;
 			while(stonesTaken > 0) {
+				i++;
 				if(i >= mancalaBoard.length)
 					i = 0;
 				if(isNotOpponentPit(i, pos)) {
 					mancalaBoard[i]++;
 					stonesTaken--;
 				}
-				i++;
 			}
-		}
-		notifyViewers();
+			
+			// If last stone lands on empty Pit of the player, steal
+			// all stones from that Pit and the Pit on the opposite side
+			// and place those stones in the player's Mancala Pit
+			if(mancalaBoard[i] == 0) {
+				 // Always one stone on previously-empty Pit
+				int capturedStones = 1;
+				
+				int oppPos = Pit.B_START.getValue() - 1 - i;
+				capturedStones += mancalaBoard[oppPos];
+				if(pos.getPlayer().equals("A")) {
+					mancalaBoard[Pit.A_START.getValue()] = capturedStones;
+				}
+				else {
+					mancalaBoard[Pit.B_START.getValue()] = capturedStones;
+				}
+				mancalaBoard[oppPos] = 0;
+				mancalaBoard[i] = 0;
+			}
+			
+			// Mutation of board is done, so notify any viewers
+			notifyViewers();
+			
+			if(isGameFinished()) {
+				return false;
+			}
+			
+			// If last stone lands on player's Mancala pit, get a free turn
+			if(isMancalaPit(i)) {
+				return true;
+			}
+			return false;
+		} // Pit chosen is the opponent's pit
+		else return true;
+	}
+	
+	// Checks if one side of the Mancala Board is empty, and place
+	// the remaining stones to the Mancala Pit of the player with those
+	// stones.
+	private boolean isGameFinished() {
+		return true;
 	}
 	
 	/**
@@ -82,6 +142,8 @@ public class MancalaGameState {
 	
 	/**
 	 * Switches the current player's turn to the other player
+	 * 
+	 * Will do nothing if no player has made their turn yet.
 	 */
 	public void changePlayers() {
 		if(currentPlayer != null) {
@@ -107,32 +169,35 @@ public class MancalaGameState {
 		}
 	}
 	
-	// Checks if the int position is not the current player's
-	// Mancala pit
-	private boolean isNotPlayerPit(int i) {
-		return (i != Pit.A_START.getValue() || i != Pit.B_START.getValue());
+	// Checks if the int position represents a Mancala Pit of
+	// either player
+	// returns true if position is a Mancala pit, else false
+	private boolean isMancalaPit(int i) {
+		return (i == Pit.A_START.getValue() || i == Pit.B_START.getValue());
 	}
 	
-	// Checks if the int position is not the opponent's Mancala
+	// Checks if the int position is the opponent's Mancala
 	// pit.
+	// returns true if position is the opponent's Mancala pit, else false
 	private boolean isNotOpponentPit(int i, Pit playerPit) {
-		return ((playerPit.getPlayer().equals("A") && i != Pit.B_START.getValue()) ||
-				(playerPit.getPlayer().equals("B") && i != Pit.A_START.getValue()));
+		return ((playerPit.getPlayer().equals("A") && i == Pit.B_START.getValue()) ||
+				(playerPit.getPlayer().equals("B") && i == Pit.A_START.getValue()));
 	}
 	
 	/**
-	 * Pits in the Mancala Board
+	 * Pits in the Mancala Board, starting from A1 Pit and moving
+	 * counter-clockwise to B_START Mancala Pit
 	 * @author Sage
 	 */
 	// Can call from other classes using MancalaGameState.Pit
 	public enum Pit{
-		A_START(0,"A"),
-		A1(1,"A"), A2(2,"A"), A3(3,"A"),
-		A4(4,"A"), A5(5,"A"), A6(6, "A"),
+		A1(0,"A"), A2(1,"A"), A3(2,"A"),
+		A4(3,"A"), A5(4,"A"), A6(5, "A"),
+		A_START(6,"A"),
 		
-		B_START(7,"B"),
-		B1(8,"B"), B2(9,"B"), B3(10,"B"),
-		B4(11,"B"), B5(12,"B"), B6(13,"B");
+		B1(7,"B"), B2(8,"B"), B3(9,"B"),
+		B4(10,"B"), B5(11,"B"), B6(12,"B"),
+		B_START(13,"B");
 		
 		private int value;
 		private String player;
