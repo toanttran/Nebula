@@ -1,4 +1,26 @@
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
 
-public class EarthBoardStyle {
+public class EarthBoardStyle implements BoardStyleManager {
+
+	@Override
+	public void drawPit(Graphics2D g2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Color getColor() {
+		// TODO Auto-generated method stub
+		return Color.GRAY;
+	}
+
+	@Override
+	public Shape getShape() {
+		// TODO Auto-generated method stub
+		return new Ellipse2D.Double(0,0,10,10);
+	}
 
 }
