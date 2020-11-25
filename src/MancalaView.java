@@ -1,15 +1,8 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.awt.geom.Ellipse2D;
-import java.util.ArrayList;
+import java.awt.*;
+import java.awt.geom.*;
+import java.util.*;
+import javax.swing.*;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  * 
@@ -18,7 +11,7 @@ import javax.swing.JPanel;
  */
 public class MancalaView extends JFrame {
 	
-	static final int PIT_SIZE = 6; 
+	private final int PIT_SIZE = 6; 
 	
 	/**
 	 * 
@@ -27,9 +20,12 @@ public class MancalaView extends JFrame {
 	 * @param width
 	 * @param height
 	 */
-	public MancalaView(String boardStyle, String stoneNumber, int width, int height) {
+	public MancalaView(String boardStyle, int stoneNumber, int width, int height) {
 		
-		JFrame frame = new JFrame("Mancala Game");
+		MancalaGameState initial = new MancalaGameState(stoneNumber);
+		
+		JFrame frame = new JFrame(boardStyle + " Style Mancala Game");
+		
 		frame.setLayout(new BorderLayout());
 		
 		//Panels to layout
@@ -38,46 +34,51 @@ public class MancalaView extends JFrame {
 		JPanel buttonPanel = new JPanel();
 		
 		JPanel playerPanel = new JPanel();
+		playerPanel.setLayout( new BorderLayout());
 		
-		
-		MancalaPits pit;
 		JPanel pitAPanel = new JPanel();
-		JButton pitButtons = new JButton("pit");
-		pitAPanel.setLayout(new GridLayout(1,6));
+
+
 		for(int i=0; i<PIT_SIZE; i++) {
+			JButton pitButtons = new JButton();
+			pitButtons.setText(stoneNumber+""); //can take this out its just a label
 			pitAPanel.add(pitButtons);
 		}
 		
-
-
 		JPanel pitBPanel = new JPanel();
-		pitBPanel.setLayout(new GridLayout(1,6));
+
 		for(int i=0; i<PIT_SIZE; i++) {
+			JButton pitButtons = new JButton();
+			pitButtons.setText(stoneNumber+""); //can take this out its just a label
 			pitBPanel.add(pitButtons);
+			
 		}
 		
 		//Buttons to layout
 		JButton undoButton = new JButton("Undo");
 		JButton doneButton = new JButton("Done");
-		JButton mancalaAButton = new JButton("A");
-		JButton mancalaBButton = new JButton("B");
 		
-		BoardStyleManager board;
+		JButton mancalaAButton = new JButton("A");
+		mancalaAButton.setHorizontalAlignment(SwingConstants.CENTER);
+		JButton mancalaBButton = new JButton("B");
+		mancalaBButton.setHorizontalAlignment(SwingConstants.CENTER);
+		
+
 		
 		if(boardStyle.equals("EarthBoard"))
 		{
-			board = new EarthBoardStyle();
+			BoardStyleManager board = new EarthBoardStyle();
 		}
 		else if(boardStyle.equals("JupiterBoard"))
 		{
-			board = new JupiterBoardStyle();
+			BoardStyleManager board = new JupiterBoardStyle();
 		}
 		
 		mancalaAPanel.add(mancalaAButton);
 		mancalaBPanel.add(mancalaBButton);
 
-		playerPanel.add(pitAPanel);
-		playerPanel.add(pitBPanel);
+		playerPanel.add(pitAPanel, BorderLayout.NORTH);
+		playerPanel.add(pitBPanel, BorderLayout.CENTER);
 		
 		buttonPanel.add(undoButton);
 		buttonPanel.add(doneButton);

@@ -12,3 +12,5 @@ public interface BoardStyleManager {
 	
 
 }
+
+//draw mancala pit, make it taller than normal pits.

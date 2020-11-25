@@ -41,12 +41,27 @@ public class MancalaTester {
 		
 		startGame.addActionListener(new ActionListener() {
 
+			@SuppressWarnings("unlikely-arg-type")
 			@Override
 			public void actionPerformed(ActionEvent e) {
+		
 				String numberOfStones = chooseStoneNum.getSelectedItem().toString();
-				String boardStyle = chooseBoardStyle.getSelectedItem().toString();
+				String playerPick = "3";
+				int n;
+				if(numberOfStones == playerPick) {
+					n = 3;
+				} else {
+					n = 4;
+				}
 				
-				JFrame frame = new MancalaView(boardStyle, numberOfStones, FRAME_WIDTH, FRAME_HEIGHT);
+				String boardStyle = chooseBoardStyle.getSelectedItem().toString();
+				if(boardStyle.equals("EarthBoard")) {
+					
+				} else {
+					
+				}
+				
+				JFrame frame = new MancalaView(boardStyle, n, FRAME_WIDTH, FRAME_HEIGHT);
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				
 				//need to close initialScreen after this button is activated.
