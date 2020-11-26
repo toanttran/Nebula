@@ -28,9 +28,8 @@ public class MancalaTester {
 		JLabel direction = new JLabel("Select Board Style and Number of Stones");
 		JButton startGame = new JButton("Start Game");
 
-		
-		Font f = direction.getFont();
 		// bold
+		Font f = direction.getFont();
 		direction.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
 		
 		String[] stoneChoices = { "3", "4"};
@@ -48,18 +47,18 @@ public class MancalaTester {
 				String numberOfStones = chooseStoneNum.getSelectedItem().toString();
 				String playerPick = "3";
 				int n;
-				if(numberOfStones == playerPick) {
+				if(numberOfStones.equals(playerPick)) {
 					n = 3;
 				} else {
 					n = 4;
 				}
 				
 				String boardStyle = chooseBoardStyle.getSelectedItem().toString();
-				if(boardStyle.equals("EarthBoard")) {
-					
-				} else {
-					
-				}
+//				if(boardStyle.equals("EarthBoard")) {
+//					
+//				} else {
+//					
+//				}
 				
 				JFrame frame = new MancalaView(boardStyle, n, FRAME_WIDTH, FRAME_HEIGHT);
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

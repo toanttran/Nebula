@@ -17,8 +17,7 @@ public class JupiterBoardStyle implements BoardStyleManager{
 
 	@Override
 	public Color getColor() {
-		// TODO Auto-generated method stub
-		return Color.MAGENTA;
+		return Color.ORANGE;
 	}
 
 	@Override

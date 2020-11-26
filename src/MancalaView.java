@@ -12,6 +12,7 @@ import javax.swing.*;
 public class MancalaView extends JFrame {
 	
 	private final int PIT_SIZE = 6; 
+	private BoardStyleManager board;
 	
 	/**
 	 * 
@@ -36,23 +37,49 @@ public class MancalaView extends JFrame {
 		JPanel playerPanel = new JPanel();
 		playerPanel.setLayout( new BorderLayout());
 		
+		
+		if(boardStyle.equals("EarthBoard"))
+		{
+			board = new EarthBoardStyle();
+		}
+		else if(boardStyle.equals("JupiterBoard"))
+		{
+			board = new JupiterBoardStyle();
+		}
+		
 		JPanel pitAPanel = new JPanel();
-
+		pitAPanel.setLayout(new GridLayout(2,6));
 
 		for(int i=0; i<PIT_SIZE; i++) {
 			JButton pitButtons = new JButton();
 			pitButtons.setText(stoneNumber+""); //can take this out its just a label
 			pitAPanel.add(pitButtons);
 		}
+		for(int i=1; i<=6; i++) {
+			JLabel label = new JLabel("A"+i);
+			pitAPanel.add(label);
+		
+		}
 		
 		JPanel pitBPanel = new JPanel();
+		pitBPanel.setLayout(new GridLayout(2,6));
+		
+		for(int i=6; i>=1; i--) {
+			JLabel label = new JLabel("B"+i);
+			pitBPanel.add(label);
+		}
 
 		for(int i=0; i<PIT_SIZE; i++) {
 			JButton pitButtons = new JButton();
 			pitButtons.setText(stoneNumber+""); //can take this out its just a label
 			pitBPanel.add(pitButtons);
-			
 		}
+		
+		pitAPanel.setBackground(board.getColor());
+		pitBPanel.setBackground(board.getColor());
+		playerPanel.setOpaque(true);
+
+		
 		
 		//Buttons to layout
 		JButton undoButton = new JButton("Undo");
@@ -62,23 +89,16 @@ public class MancalaView extends JFrame {
 		mancalaAButton.setHorizontalAlignment(SwingConstants.CENTER);
 		JButton mancalaBButton = new JButton("B");
 		mancalaBButton.setHorizontalAlignment(SwingConstants.CENTER);
-		
-
-		
-		if(boardStyle.equals("EarthBoard"))
-		{
-			BoardStyleManager board = new EarthBoardStyle();
-		}
-		else if(boardStyle.equals("JupiterBoard"))
-		{
-			BoardStyleManager board = new JupiterBoardStyle();
-		}
+	
 		
 		mancalaAPanel.add(mancalaAButton);
 		mancalaBPanel.add(mancalaBButton);
+		
 
-		playerPanel.add(pitAPanel, BorderLayout.NORTH);
-		playerPanel.add(pitBPanel, BorderLayout.CENTER);
+		playerPanel.add(pitBPanel, BorderLayout.NORTH);
+		playerPanel.add(pitAPanel, BorderLayout.CENTER);
+		
+
 		
 		buttonPanel.add(undoButton);
 		buttonPanel.add(doneButton);

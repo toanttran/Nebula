@@ -13,7 +13,6 @@ public class EarthBoardStyle implements BoardStyleManager {
 
 	@Override
 	public Color getColor() {
-		// TODO Auto-generated method stub
 		return Color.GRAY;
 	}
 
