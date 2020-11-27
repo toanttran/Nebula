@@ -4,15 +4,18 @@ import java.util.*;
 import javax.swing.*;
 
 
+
 /**
  * 
  * @author toanmacbook
  *
  */
-public class MancalaView extends JFrame {
+public class MancalaView extends JFrame{
 	
 	private final int PIT_SIZE = 6; 
 	private BoardStyleManager board;
+	private MancalaGameState gameState;
+	private ArrayList<JButton> pitButtons;
 	
 	/**
 	 * 
@@ -23,7 +26,7 @@ public class MancalaView extends JFrame {
 	 */
 	public MancalaView(String boardStyle, int stoneNumber, int width, int height) {
 		
-		MancalaGameState initial = new MancalaGameState(stoneNumber);
+		gameState = new MancalaGameState(stoneNumber);
 		
 		JFrame frame = new JFrame(boardStyle + " Style Mancala Game");
 		
@@ -51,10 +54,11 @@ public class MancalaView extends JFrame {
 		pitAPanel.setLayout(new GridLayout(2,6));
 
 		for(int i=0; i<PIT_SIZE; i++) {
-			JButton pitButtons = new JButton();
-			pitButtons.setPreferredSize(new Dimension(50, 50));
-			pitButtons.setText(stoneNumber+""); //can take this out its just a label
-			pitAPanel.add(pitButtons);
+			JButton button = new JButton();
+			pitButtons.add(button);
+			button.setPreferredSize(new Dimension(50, 50));
+			button.setText(stoneNumber+""); //can take this out its just a label
+			pitAPanel.add(button);
 		}
 
 		MancalaGameState.Pit[] pits = MancalaGameState.Pit.values();
@@ -76,11 +80,13 @@ public class MancalaView extends JFrame {
 		}
 
 		for(int i=0; i<PIT_SIZE; i++) {
-			JButton pitButtons = new JButton();
-			pitButtons.setPreferredSize(new Dimension(50, 50));
-			pitButtons.setText(stoneNumber+""); //can take this out its just a label
-			pitBPanel.add(pitButtons);
+			JButton button = new JButton();
+			pitButtons.add(button);
+			button.setPreferredSize(new Dimension(50, 50));
+			button.setText(stoneNumber+""); //can take this out its just a label
+			pitBPanel.add(button);
 		}
+		
 		
 		pitAPanel.setBackground(board.getColor());
 		pitBPanel.setBackground(board.getColor());
@@ -96,6 +102,8 @@ public class MancalaView extends JFrame {
 		mancalaAButton.setPreferredSize(new Dimension(50, 110));
 		JButton mancalaBButton = new JButton("B");
 		mancalaBButton.setPreferredSize(new Dimension(50, 110));
+		
+		
 	
 		
 		mancalaAPanel.add(mancalaAButton);
