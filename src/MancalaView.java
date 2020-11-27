@@ -52,11 +52,13 @@ public class MancalaView extends JFrame {
 
 		for(int i=0; i<PIT_SIZE; i++) {
 			JButton pitButtons = new JButton();
+			pitButtons.setPreferredSize(new Dimension(50, 50));
 			pitButtons.setText(stoneNumber+""); //can take this out its just a label
 			pitAPanel.add(pitButtons);
 		}
 		for(int i=1; i<=6; i++) {
-			JLabel label = new JLabel("A"+i);
+			JLabel label = new JLabel("A"+i, SwingConstants.CENTER);
+			label.setPreferredSize(new Dimension(50, 5));
 			pitAPanel.add(label);
 		
 		}
@@ -65,12 +67,14 @@ public class MancalaView extends JFrame {
 		pitBPanel.setLayout(new GridLayout(2,6));
 		
 		for(int i=6; i>=1; i--) {
-			JLabel label = new JLabel("B"+i);
+			JLabel label = new JLabel("B"+i, SwingConstants.CENTER);
+			label.setPreferredSize(new Dimension(50, 5));
 			pitBPanel.add(label);
 		}
 
 		for(int i=0; i<PIT_SIZE; i++) {
 			JButton pitButtons = new JButton();
+			pitButtons.setPreferredSize(new Dimension(50, 50));
 			pitButtons.setText(stoneNumber+""); //can take this out its just a label
 			pitBPanel.add(pitButtons);
 		}
@@ -86,9 +90,9 @@ public class MancalaView extends JFrame {
 		JButton doneButton = new JButton("Done");
 		
 		JButton mancalaAButton = new JButton("A");
-		mancalaAButton.setHorizontalAlignment(SwingConstants.CENTER);
+		mancalaAButton.setPreferredSize(new Dimension(50, 110));
 		JButton mancalaBButton = new JButton("B");
-		mancalaBButton.setHorizontalAlignment(SwingConstants.CENTER);
+		mancalaBButton.setPreferredSize(new Dimension(50, 110));
 	
 		
 		mancalaAPanel.add(mancalaAButton);
