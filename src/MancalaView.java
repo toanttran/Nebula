@@ -15,7 +15,7 @@ public class MancalaView extends JFrame{
 	private final int PIT_SIZE = 6; 
 	private BoardStyleManager board;
 	private MancalaGameState gameState;
-	private ArrayList<JButton> pitButtons;
+	private ArrayList<JButton> pitButtons = new ArrayList<JButton>();
 	
 	/**
 	 * 
@@ -99,9 +99,9 @@ public class MancalaView extends JFrame{
 		JButton doneButton = new JButton("Done");
 		
 		JButton mancalaAButton = new JButton("A");
-		mancalaAButton.setPreferredSize(new Dimension(50, 110));
+		mancalaAButton.setPreferredSize(new Dimension(50, 50));
 		JButton mancalaBButton = new JButton("B");
-		mancalaBButton.setPreferredSize(new Dimension(50, 110));
+		mancalaBButton.setPreferredSize(new Dimension(50, 50));
 		
 		
 	
