@@ -4,18 +4,15 @@ import java.util.*;
 import javax.swing.*;
 
 
-
 /**
  * 
  * @author toanmacbook
  *
  */
-public class MancalaView extends JFrame{
+public class MancalaView extends JFrame {
 	
 	private final int PIT_SIZE = 6; 
 	private BoardStyleManager board;
-	private MancalaGameState gameState;
-	private ArrayList<JButton> pitButtons;
 	
 	/**
 	 * 
@@ -26,7 +23,7 @@ public class MancalaView extends JFrame{
 	 */
 	public MancalaView(String boardStyle, int stoneNumber, int width, int height) {
 		
-		gameState = new MancalaGameState(stoneNumber);
+		MancalaGameState initial = new MancalaGameState(stoneNumber);
 		
 		JFrame frame = new JFrame(boardStyle + " Style Mancala Game");
 		
@@ -54,39 +51,33 @@ public class MancalaView extends JFrame{
 		pitAPanel.setLayout(new GridLayout(2,6));
 
 		for(int i=0; i<PIT_SIZE; i++) {
-			JButton button = new JButton();
-			pitButtons.add(button);
-			button.setPreferredSize(new Dimension(50, 50));
-			button.setText(stoneNumber+""); //can take this out its just a label
-			pitAPanel.add(button);
+			JButton pitButtons = new JButton();
+			pitButtons.setPreferredSize(new Dimension(50, 50));
+			pitButtons.setText(stoneNumber+""); //can take this out its just a label
+			pitAPanel.add(pitButtons);
 		}
-
-		MancalaGameState.Pit[] pits = MancalaGameState.Pit.values();
-		for(int i=0; i<pits.length/2-1;i++)
-		{
-			JLabel label = new JLabel(""+pits[i],SwingConstants.CENTER);
+		for(int i=1; i<=6; i++) {
+			JLabel label = new JLabel("A"+i, SwingConstants.CENTER);
 			label.setPreferredSize(new Dimension(50, 5));
 			pitAPanel.add(label);
+		
 		}
 		
 		JPanel pitBPanel = new JPanel();
 		pitBPanel.setLayout(new GridLayout(2,6));
 		
-		for(int i=pits.length-2; i>=pits.length/2;i--)
-		{
-			JLabel label = new JLabel(""+pits[i],SwingConstants.CENTER);
+		for(int i=6; i>=1; i--) {
+			JLabel label = new JLabel("B"+i, SwingConstants.CENTER);
 			label.setPreferredSize(new Dimension(50, 5));
 			pitBPanel.add(label);
 		}
 
 		for(int i=0; i<PIT_SIZE; i++) {
-			JButton button = new JButton();
-			pitButtons.add(button);
-			button.setPreferredSize(new Dimension(50, 50));
-			button.setText(stoneNumber+""); //can take this out its just a label
-			pitBPanel.add(button);
+			JButton pitButtons = new JButton();
+			pitButtons.setPreferredSize(new Dimension(50, 50));
+			pitButtons.setText(stoneNumber+""); //can take this out its just a label
+			pitBPanel.add(pitButtons);
 		}
-		
 		
 		pitAPanel.setBackground(board.getColor());
 		pitBPanel.setBackground(board.getColor());
@@ -102,13 +93,10 @@ public class MancalaView extends JFrame{
 		mancalaAButton.setPreferredSize(new Dimension(50, 110));
 		JButton mancalaBButton = new JButton("B");
 		mancalaBButton.setPreferredSize(new Dimension(50, 110));
-		
-		
 	
 		
 		mancalaAPanel.add(mancalaAButton);
 		mancalaBPanel.add(mancalaBButton);
-
 		
 
 		playerPanel.add(pitBPanel, BorderLayout.NORTH);
