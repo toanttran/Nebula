@@ -75,6 +75,24 @@ public class MancalaView extends JFrame implements MouseListener{
 			}
 		};
 		
+		Icon mancalaDrawing = new Icon() {
+			public int getIconWidth() {
+				return 0;
+			}
+
+			@Override
+			public void paintIcon(Component c, Graphics g, int x, int y) {
+				Graphics2D g2 = (Graphics2D) g;
+				board.drawMancala(g2);
+				
+			}
+
+			@Override
+			public int getIconHeight() {
+				return 0;
+			}
+		};
+		
 		Icon stoneDrawing = new Icon() {
 			public int getIconWidth() {
 				return 0;
@@ -136,12 +154,12 @@ public class MancalaView extends JFrame implements MouseListener{
 		JButton undoButton = new JButton("Undo");
 		JButton doneButton = new JButton("Done");
 		
-		JLabel mancalaALabel = new JLabel(pitDrawings);
-		mancalaALabel.setPreferredSize(new Dimension(60, 60));
+		JLabel mancalaALabel = new JLabel(mancalaDrawing);
+		mancalaALabel.setPreferredSize(new Dimension(60, 200));
 		mancalaAPanel.add(mancalaALabel);
 		
-		JLabel mancalaBLabel = new JLabel(pitDrawings);
-		mancalaBLabel.setPreferredSize(new Dimension(60, 60));
+		JLabel mancalaBLabel = new JLabel(mancalaDrawing);
+		mancalaBLabel.setPreferredSize(new Dimension(60, 200));
 		mancalaBPanel.add(mancalaBLabel);
 		
 

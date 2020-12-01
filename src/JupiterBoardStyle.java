@@ -38,6 +38,12 @@ public class JupiterBoardStyle implements BoardStyleManager{
 	public Shape getStone() {
 		return stoneShape;
 	}
+
+	@Override
+	public void drawMancala(Graphics2D g2) {
+		Rectangle2D.Double mancala = new Rectangle2D.Double(0, 0, 60, 200);		
+		g2.draw(mancala);
+	}
 	
 	
 

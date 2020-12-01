@@ -42,5 +42,11 @@ public class EarthBoardStyle implements BoardStyleManager {
 		return stoneShape;
 	}
 
+	@Override
+	public void drawMancala(Graphics2D g2) {
+		Ellipse2D.Double mancala = new Ellipse2D.Double(0, 0, 60, 200);		
+		g2.draw(mancala);		
+	}
+
 
 }
