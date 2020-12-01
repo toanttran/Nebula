@@ -2,15 +2,19 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.ImageIcon;
 
 public class EarthBoardStyle implements BoardStyleManager {
+	
+	private Shape pitShape;
 
 	@Override
 	public void drawPit(Graphics2D g2) {
-		// TODO Auto-generated method stub
-		
+		Ellipse2D.Double pit = new Ellipse2D.Double(0,0,50,50);
+		pitShape = pit;
+		g2.draw(pit);		
 	}
 
 	@Override
@@ -20,8 +24,7 @@ public class EarthBoardStyle implements BoardStyleManager {
 
 	@Override
 	public Shape getShape() {
-		// TODO Auto-generated method stub
-		return new Ellipse2D.Double(0,0,10,10);
+		return pitShape;
 	}
 
 

@@ -54,13 +54,30 @@ public class MancalaView extends JFrame{
 		
 		JPanel pitAPanel = new JPanel();
 		pitAPanel.setLayout(new GridLayout(2,6));
+		
+		Icon pitDrawings = new Icon() {
+			public int getIconWidth() {
+				return 0;
+			}
+
+			@Override
+			public void paintIcon(Component c, Graphics g, int x, int y) {
+				Graphics2D g2 = (Graphics2D) g;
+				board.drawPit(g2);
+				
+			}
+
+			@Override
+			public int getIconHeight() {
+				return 0;
+			}
+		};
+
 
 		for(int i=0; i<PIT_SIZE; i++) {
-			JButton button = new JButton();
-			pitButtons.add(button);
-			button.setPreferredSize(new Dimension(50, 50));
-			button.setText(stoneNumber+""); //can take this out its just a label
-			pitAPanel.add(button);
+			JLabel pitLabel = new JLabel(pitDrawings);
+			pitLabel.setPreferredSize(new Dimension(50, 50));
+			pitAPanel.add(pitLabel);
 		}
 
 		MancalaGameState.Pit[] pits = MancalaGameState.Pit.values();
@@ -82,11 +99,9 @@ public class MancalaView extends JFrame{
 		}
 
 		for(int i=0; i<PIT_SIZE; i++) {
-			JButton button = new JButton();
-			pitButtons.add(button);
-			button.setPreferredSize(new Dimension(50, 50));
-			button.setText(stoneNumber+""); //can take this out its just a label
-			pitBPanel.add(button);
+			JLabel pitLabel = new JLabel(pitDrawings);
+			pitLabel.setPreferredSize(new Dimension(50, 50));
+			pitBPanel.add(pitLabel);
 		}
 		
 		
