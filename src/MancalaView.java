@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.*;
 import java.util.*;
 import javax.swing.*;
@@ -10,12 +12,12 @@ import javax.swing.*;
  * @author toanmacbook
  *
  */
-public class MancalaView extends JFrame{
+public class MancalaView extends JFrame implements MouseListener{
 	
 	private final int PIT_SIZE = 6; 
 	private BoardStyleManager board;
 	private MancalaGameState gameState;
-	private ArrayList<JButton> pitButtons;
+	private ArrayList<JLabel> mancalaPits;
 	
 	/**
 	 * 
@@ -26,7 +28,7 @@ public class MancalaView extends JFrame{
 	 */
 	public MancalaView(String boardStyle, int stoneNumber, int width, int height) {
 		
-		pitButtons = new ArrayList<JButton>();
+		mancalaPits = new ArrayList<JLabel>();
 		
 		gameState = new MancalaGameState(stoneNumber);
 		
@@ -72,11 +74,30 @@ public class MancalaView extends JFrame{
 				return 0;
 			}
 		};
+		
+		Icon stoneDrawing = new Icon() {
+			public int getIconWidth() {
+				return 0;
+			}
+
+			@Override
+			public void paintIcon(Component c, Graphics g, int x, int y) {
+				Graphics2D g2 = (Graphics2D) g;
+				board.drawStone(g2);
+				
+			}
+
+			@Override
+			public int getIconHeight() {
+				return 0;
+			}
+		};
+
 
 
 		for(int i=0; i<PIT_SIZE; i++) {
 			JLabel pitLabel = new JLabel(pitDrawings);
-			pitLabel.setPreferredSize(new Dimension(50, 50));
+			pitLabel.setPreferredSize(new Dimension(60, 60));
 			pitAPanel.add(pitLabel);
 		}
 
@@ -100,7 +121,7 @@ public class MancalaView extends JFrame{
 
 		for(int i=0; i<PIT_SIZE; i++) {
 			JLabel pitLabel = new JLabel(pitDrawings);
-			pitLabel.setPreferredSize(new Dimension(50, 50));
+			pitLabel.setPreferredSize(new Dimension(60, 60));
 			pitBPanel.add(pitLabel);
 		}
 		
@@ -115,17 +136,13 @@ public class MancalaView extends JFrame{
 		JButton undoButton = new JButton("Undo");
 		JButton doneButton = new JButton("Done");
 		
-		JButton mancalaAButton = new JButton("A");
-		mancalaAButton.setPreferredSize(new Dimension(50, 50));
-		JButton mancalaBButton = new JButton("B");
-		mancalaBButton.setPreferredSize(new Dimension(50, 50));
+		JLabel mancalaALabel = new JLabel(pitDrawings);
+		mancalaALabel.setPreferredSize(new Dimension(60, 60));
+		mancalaAPanel.add(mancalaALabel);
 		
-		
-	
-		
-		mancalaAPanel.add(mancalaAButton);
-		mancalaBPanel.add(mancalaBButton);
-
+		JLabel mancalaBLabel = new JLabel(pitDrawings);
+		mancalaBLabel.setPreferredSize(new Dimension(60, 60));
+		mancalaBPanel.add(mancalaBLabel);
 		
 
 		playerPanel.add(pitBPanel, BorderLayout.NORTH);
@@ -136,6 +153,8 @@ public class MancalaView extends JFrame{
 		buttonPanel.add(undoButton);
 		buttonPanel.add(doneButton);
 		
+		addMouseListener(this);
+		
 		frame.add(mancalaAPanel, BorderLayout.EAST);
 		frame.add(mancalaBPanel, BorderLayout.WEST);
 		frame.add(playerPanel, BorderLayout.CENTER);
@@ -143,6 +162,36 @@ public class MancalaView extends JFrame{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		//want to check which label in the arraylist of labels is pressed? 
+		JLabel labelPressed = (JLabel) e.getSource();		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
