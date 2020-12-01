@@ -15,7 +15,7 @@ public class MancalaView extends JFrame{
 	private final int PIT_SIZE = 6; 
 	private BoardStyleManager board;
 	private MancalaGameState gameState;
-	private ArrayList<JButton> pitButtons = new ArrayList<JButton>();
+	private ArrayList<JButton> pitButtons;
 	
 	/**
 	 * 
@@ -25,6 +25,8 @@ public class MancalaView extends JFrame{
 	 * @param height
 	 */
 	public MancalaView(String boardStyle, int stoneNumber, int width, int height) {
+		
+		pitButtons = new ArrayList<JButton>();
 		
 		gameState = new MancalaGameState(stoneNumber);
 		

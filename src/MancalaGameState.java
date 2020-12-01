@@ -35,6 +35,7 @@ public class MancalaGameState {
 		}
 		lastBoard = null;
 		currentPlayer = null;
+		gameEnd = false;
 	}
 	
 	/**
@@ -44,7 +45,10 @@ public class MancalaGameState {
 	 * the game, then the player that owns the selected Pit gains
 	 * sole control of the Mancala Board.
 	 * 
-	 * Will do nothing if the player picked their opponenet's Pit, or
+	 * The returned Boolean value determines if the outcome after the
+	 * move should give a free turn as per game rules.
+	 * 
+	 * Will do nothing if the player picked their opponent's Pit, or
 	 * if the specified Pit is either empty or a Mancala Pit 
 	 * of either player
 	 * 
@@ -55,7 +59,8 @@ public class MancalaGameState {
 	 */
 	public boolean movePit(Pit pos) {
 		// Do nothing if player chose a Mancala Pit
-		if(isMancalaPit(pos.getValue())) {
+		// or if the game has already ended
+		if(isMancalaPit(pos.getValue()) && gameEnd == true) {
 			return true; // Should not consume a turn
 		}
 		
@@ -109,6 +114,7 @@ public class MancalaGameState {
 			notifyViewers();
 			
 			if(isGameFinished()) {
+				gameEnd = true;
 				return false;
 			}
 			
@@ -121,11 +127,41 @@ public class MancalaGameState {
 		else return true;
 	}
 	
-	// Checks if one side of the Mancala Board is empty, and place
-	// the remaining stones to the Mancala Pit of the player with those
-	// stones.
+	// Helper method of movePit() that checks if one side
+	// of the Mancala Board is empty, and place the remaining
+	// stones to the Mancala Pit of the player with those stones.
 	private boolean isGameFinished() {
-		return true;
+		boolean gameOverA = true;
+		int aStart = Pit.A1.getValue();
+		int aEnd = Pit.A_START.getValue();
+		for(int i = aStart; i < aEnd && gameOverA; i++) {
+			if(mancalaBoard[i] != 0)
+				gameOverA = false;
+		}
+		
+		boolean gameOverB = true;
+		int bStart = Pit.B1.getValue();
+		int bEnd = Pit.B_START.getValue();
+		for(int i = bStart; i < bEnd && gameOverB; i++) {
+			if(mancalaBoard[i] != 0)
+				gameOverB = false;
+		}
+		
+		if(gameOverA || gameOverB)
+			return true;
+		else
+			return false;
+	}
+	
+	/**
+	 * Gets the winner of the Mancala Board if the game has ended
+	 * @return The String representation of the winning player.
+	 */
+	public String getGameWinner() {
+		if(gameEnd)
+			return currentPlayer;
+		else
+			return null;
 	}
 	
 	/**
@@ -133,7 +169,7 @@ public class MancalaGameState {
 	 * it to its previous state
 	 */
 	public void undoLastMove() {
-		if(lastBoard != null) {
+		if(lastBoard != null && !gameEnd) {
 			mancalaBoard = lastBoard;
 			lastBoard = null;
 			notifyViewers();
@@ -146,7 +182,7 @@ public class MancalaGameState {
 	 * Will do nothing if no player has made their turn yet.
 	 */
 	public void changePlayers() {
-		if(currentPlayer != null) {
+		if(currentPlayer != null && !gameEnd) {
 			if(currentPlayer.equals("A"))
 				currentPlayer = "B";
 			else if(currentPlayer.equals("B"))
