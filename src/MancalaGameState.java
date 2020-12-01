@@ -4,7 +4,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
- * A Model for the Mancala Game
+ * A Model that represents a physical Mancala Board, with Pits
+ * and stones.
  * @author Sage
  *
  */
@@ -33,9 +34,39 @@ public class MancalaGameState {
 			else
 				mancalaBoard[i] = 0;
 		}
-		lastBoard = null;
-		currentPlayer = null;
-		gameEnd = false;
+		lastBoard		= null;
+		currentPlayer	= null;
+		gameEnd			= false;
+	}
+	
+	/**
+	 * Gets the number of stones in a specified Pit position
+	 * @param pos The Pit to check the number of stones
+	 * @return The number of stones in the given Pit
+	 */
+	public int getNumOfStones(Pit pos) {
+		return mancalaBoard[pos.getValue()];
+	}
+	
+	/**
+	 * Gets the number of stones in a specified index of the Mancala
+	 * Board.
+	 * @param i The index to check for stones
+	 * @return The number of stones in the given index
+	 */
+	public int getNumOfStones(int i) {
+		return mancalaBoard[i];
+	}
+	
+	/**
+	 * Gets the winner of the Mancala Board if the game has ended
+	 * @return The String representation of the winning player.
+	 */
+	public String getGameWinner() {
+		if(gameEnd)
+			return currentPlayer;
+		else
+			return null;
 	}
 	
 	/**
@@ -60,16 +91,16 @@ public class MancalaGameState {
 	public boolean movePit(Pit pos) {
 		// Do nothing if player chose a Mancala Pit
 		// or if the game has already ended
-		if(isMancalaPit(pos.getValue()) && gameEnd == true) {
-			return true; // Should not consume a turn
+		if(isMancalaPit(pos.getValue()) || gameEnd == true) {
+			return true;
 		}
 		
-		// Sets the player if this is the first turn
+		// First turn
 		if(currentPlayer == null) {
 			currentPlayer = pos.getPlayer();
 		}
 		
-		// Check if the player picked their own Pit
+		// Player's own Pit is picked
 		if(currentPlayer.equals(pos.getPlayer())) {
 			int stonesTaken = mancalaBoard[pos.getValue()];
 			
@@ -77,6 +108,9 @@ public class MancalaGameState {
 			if(stonesTaken <= 0) {
 				return true;
 			}
+			
+			// Assume outcome will not give free turn
+			boolean freeTurn = false;
 			lastBoard = mancalaBoard.clone();
 		
 			// Loops through the board until stones in hand are empty
@@ -85,6 +119,7 @@ public class MancalaGameState {
 				i++;
 				if(i >= mancalaBoard.length)
 					i = 0;
+				
 				if(isNotOpponentPit(i, pos)) {
 					mancalaBoard[i]++;
 					stonesTaken--;
@@ -93,13 +128,11 @@ public class MancalaGameState {
 			
 			// If last stone lands on empty Pit of the player, steal
 			// all stones from that Pit and the Pit on the opposite side
-			// and place those stones in the player's Mancala Pit
-			if(mancalaBoard[i] == 0) {
-				 // Always one stone on previously-empty Pit
-				int capturedStones = 1;
-				
+			// and place those stones in the player's Mancala Pit.
+			// Note: Always one stone on previously-empty Pit
+			if(mancalaBoard[i] == 1) {
 				int oppPos = Pit.B_START.getValue() - 1 - i;
-				capturedStones += mancalaBoard[oppPos];
+				int capturedStones = mancalaBoard[oppPos] + 1;
 				if(pos.getPlayer().equals("A")) {
 					mancalaBoard[Pit.A_START.getValue()] = capturedStones;
 				}
@@ -110,58 +143,21 @@ public class MancalaGameState {
 				mancalaBoard[i] = 0;
 			}
 			
-			// Mutation of board is done, so notify any viewers
-			notifyViewers();
+			// If last stone lands on player's Mancala pit, get a free turn
+			if(isMancalaPit(i)) {
+				freeTurn = true;
+			}
 			
 			if(isGameFinished()) {
 				gameEnd = true;
-				return false;
+				freeTurn = false;
 			}
 			
-			// If last stone lands on player's Mancala pit, get a free turn
-			if(isMancalaPit(i)) {
-				return true;
-			}
-			return false;
-		} // Pit chosen is the opponent's pit
+			// Mutation of board is done, so notify any viewers
+			notifyViewers();
+			return freeTurn;
+		} // Opponent pit is picked
 		else return true;
-	}
-	
-	// Helper method of movePit() that checks if one side
-	// of the Mancala Board is empty, and place the remaining
-	// stones to the Mancala Pit of the player with those stones.
-	private boolean isGameFinished() {
-		boolean gameOverA = true;
-		int aStart = Pit.A1.getValue();
-		int aEnd = Pit.A_START.getValue();
-		for(int i = aStart; i < aEnd && gameOverA; i++) {
-			if(mancalaBoard[i] != 0)
-				gameOverA = false;
-		}
-		
-		boolean gameOverB = true;
-		int bStart = Pit.B1.getValue();
-		int bEnd = Pit.B_START.getValue();
-		for(int i = bStart; i < bEnd && gameOverB; i++) {
-			if(mancalaBoard[i] != 0)
-				gameOverB = false;
-		}
-		
-		if(gameOverA || gameOverB)
-			return true;
-		else
-			return false;
-	}
-	
-	/**
-	 * Gets the winner of the Mancala Board if the game has ended
-	 * @return The String representation of the winning player.
-	 */
-	public String getGameWinner() {
-		if(gameEnd)
-			return currentPlayer;
-		else
-			return null;
 	}
 	
 	/**
@@ -203,6 +199,32 @@ public class MancalaGameState {
 		for(ChangeListener cl : viewers) {
 			cl.stateChanged(new ChangeEvent(this));
 		}
+	}
+	
+	// Helper method of movePit() that checks if one side
+	// of the Mancala Board is empty, and place the remaining
+	// stones to the Mancala Pit of the player with those stones.
+	private boolean isGameFinished() {
+		boolean gameOverA = true;
+		int aStart	= Pit.A1.getValue();
+		int aEnd	= Pit.A_START.getValue();
+		for(int i = aStart; i < aEnd && gameOverA; i++) {
+			if(mancalaBoard[i] != 0)
+				gameOverA = false;
+		}
+		
+		boolean gameOverB = true;
+		int bStart	= Pit.B1.getValue();
+		int bEnd	= Pit.B_START.getValue();
+		for(int i = bStart; i < bEnd && gameOverB; i++) {
+			if(mancalaBoard[i] != 0)
+				gameOverB = false;
+		}
+		
+		if(gameOverA || gameOverB)
+			return true;
+		else
+			return false;
 	}
 	
 	// Checks if the int position represents a Mancala Pit of
@@ -247,7 +269,7 @@ public class MancalaGameState {
 		 * Gets the value of this Pit as an int
 		 * @return the int value corresponding to this Pit
 		 */
-		public int getValue() 
+		public int getValue()
 		{ return value; }
 		
 		/**
@@ -257,5 +279,4 @@ public class MancalaGameState {
 		public String getPlayer() 
 		{ return player; }
 	}
-	
 }
