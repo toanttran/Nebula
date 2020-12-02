@@ -1,34 +1,40 @@
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 
 /**
  * 
- * @author toanmacbook
+ * @author Toan & Ye Sol
  *
  */
-public class MancalaView extends JFrame implements MouseListener{
+public class MancalaView extends JFrame {
 	
 	private final int PIT_SIZE = 6; 
 	private BoardStyleManager board;
 	private MancalaGameState gameState;
-	private ArrayList<JLabel> mancalaPits;
-	
+	private ArrayList<JButton> pitButtons;
+	private final int ICON_HEIGHT = 50;
+	private final int ICON_WIDTH = 50;
 	/**
 	 * 
-	 * @param chooseBoardStyle
-	 * @param chooseStoneNum
+	 * @param boardStyle
+	 * @param stoneNumber
 	 * @param width
 	 * @param height
 	 */
-	public MancalaView(String boardStyle, int stoneNumber, int width, int height) {
+	public MancalaView(String boardStyle, int stoneNumber) {
 		
-		mancalaPits = new ArrayList<JLabel>();
+
+		
+		pitButtons = new ArrayList<JButton>();
 		
 		gameState = new MancalaGameState(stoneNumber);
 		
@@ -57,9 +63,10 @@ public class MancalaView extends JFrame implements MouseListener{
 		JPanel pitAPanel = new JPanel();
 		pitAPanel.setLayout(new GridLayout(2,6));
 		
+
 		Icon pitDrawings = new Icon() {
 			public int getIconWidth() {
-				return 0;
+				return ICON_WIDTH;
 			}
 
 			@Override
@@ -71,58 +78,21 @@ public class MancalaView extends JFrame implements MouseListener{
 
 			@Override
 			public int getIconHeight() {
-				return 0;
+				return ICON_HEIGHT;
 			}
 		};
-		
-		Icon mancalaDrawing = new Icon() {
-			public int getIconWidth() {
-				return 0;
-			}
-
-			@Override
-			public void paintIcon(Component c, Graphics g, int x, int y) {
-				Graphics2D g2 = (Graphics2D) g;
-				board.drawMancala(g2);
-				
-			}
-
-			@Override
-			public int getIconHeight() {
-				return 0;
-			}
-		};
-		
-		Icon stoneDrawing = new Icon() {
-			public int getIconWidth() {
-				return 0;
-			}
-
-			@Override
-			public void paintIcon(Component c, Graphics g, int x, int y) {
-				Graphics2D g2 = (Graphics2D) g;
-				board.drawStone(g2);
-				
-			}
-
-			@Override
-			public int getIconHeight() {
-				return 0;
-			}
-		};
-
 
 
 		for(int i=0; i<PIT_SIZE; i++) {
 			JLabel pitLabel = new JLabel(pitDrawings);
-			pitLabel.setPreferredSize(new Dimension(60, 60));
+			pitLabel.setPreferredSize(new Dimension(50, 50));
 			pitAPanel.add(pitLabel);
 		}
 
 		MancalaGameState.Pit[] pits = MancalaGameState.Pit.values();
 		for(int i=0; i<pits.length/2-1;i++)
 		{
-			JLabel label = new JLabel(""+pits[i],SwingConstants.CENTER);
+			JLabel label = new JLabel(""+pits[i], SwingConstants.CENTER);
 			label.setPreferredSize(new Dimension(50, 5));
 			pitAPanel.add(label);
 		}
@@ -139,7 +109,7 @@ public class MancalaView extends JFrame implements MouseListener{
 
 		for(int i=0; i<PIT_SIZE; i++) {
 			JLabel pitLabel = new JLabel(pitDrawings);
-			pitLabel.setPreferredSize(new Dimension(60, 60));
+			pitLabel.setPreferredSize(new Dimension(50, 50));
 			pitBPanel.add(pitLabel);
 		}
 		
@@ -154,24 +124,33 @@ public class MancalaView extends JFrame implements MouseListener{
 		JButton undoButton = new JButton("Undo");
 		JButton doneButton = new JButton("Done");
 		
-		JLabel mancalaALabel = new JLabel(mancalaDrawing);
-		mancalaALabel.setPreferredSize(new Dimension(60, 200));
-		mancalaAPanel.add(mancalaALabel);
+		JButton mancalaAButton = new JButton("A");
+		mancalaAButton.setPreferredSize(new Dimension(50, 50));
+		JButton mancalaBButton = new JButton("B");
+		mancalaBButton.setPreferredSize(new Dimension(50, 50));
 		
-		JLabel mancalaBLabel = new JLabel(mancalaDrawing);
-		mancalaBLabel.setPreferredSize(new Dimension(60, 200));
-		mancalaBPanel.add(mancalaBLabel);
+		
+	
+		
+		mancalaAPanel.add(mancalaAButton);
+		mancalaBPanel.add(mancalaBButton);
+
 		
 
 		playerPanel.add(pitBPanel, BorderLayout.NORTH);
 		playerPanel.add(pitAPanel, BorderLayout.CENTER);
+		playerPanel.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				int x = e.getX()/ICON_WIDTH;
+				int y = e.getY()/ICON_HEIGHT;
+				System.out.println(x + "," + y);
+			}
+		});
 		
 
 		
 		buttonPanel.add(undoButton);
 		buttonPanel.add(doneButton);
-		
-		addMouseListener(this);
 		
 		frame.add(mancalaAPanel, BorderLayout.EAST);
 		frame.add(mancalaBPanel, BorderLayout.WEST);
@@ -180,36 +159,6 @@ public class MancalaView extends JFrame implements MouseListener{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		//want to check which label in the arraylist of labels is pressed? 
-		JLabel labelPressed = (JLabel) e.getSource();		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }

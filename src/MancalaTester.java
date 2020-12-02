@@ -19,9 +19,6 @@ public class MancalaTester {
 	
 	public static void main(String[] args) {
 		
-		
-		final int FRAME_WIDTH = 500;
-		final int FRAME_HEIGHT = 200;
 		JFrame initialScreen = new JFrame("Game Setup");
 		JPanel panel = new JPanel();
 		JPanel buttonPanel = new JPanel();
@@ -60,7 +57,7 @@ public class MancalaTester {
 //					
 //				}
 				
-				JFrame frame = new MancalaView(boardStyle, n, FRAME_WIDTH, FRAME_HEIGHT);
+				JFrame frame = new MancalaView(boardStyle, n);
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				
 				//need to close initialScreen after this button is activated.
