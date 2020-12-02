@@ -51,12 +51,7 @@ public class MancalaTester {
 				}
 				
 				String boardStyle = chooseBoardStyle.getSelectedItem().toString();
-//				if(boardStyle.equals("EarthBoard")) {
-//					
-//				} else {
-//					
-//				}
-				
+
 				JFrame frame = new MancalaView(boardStyle, n);
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				

@@ -81,6 +81,43 @@ public class MancalaView extends JFrame {
 				return ICON_HEIGHT;
 			}
 		};
+		
+		Icon mancalaDrawing = new Icon() {
+			public int getIconWidth() {
+				return 0;
+			}
+
+			@Override
+			public void paintIcon(Component c, Graphics g, int x, int y) {
+				Graphics2D g2 = (Graphics2D) g;
+				board.drawMancala(g2);
+				
+			}
+
+			@Override
+			public int getIconHeight() {
+				return 0;
+			}
+		};
+		
+		Icon stoneDrawing = new Icon() {
+			public int getIconWidth() {
+				return 0;
+			}
+
+			@Override
+			public void paintIcon(Component c, Graphics g, int x, int y) {
+				Graphics2D g2 = (Graphics2D) g;
+				board.drawStone(g2);
+				
+			}
+
+			@Override
+			public int getIconHeight() {
+				return 0;
+			}
+		};
+
 
 
 		for(int i=0; i<PIT_SIZE; i++) {
@@ -124,17 +161,13 @@ public class MancalaView extends JFrame {
 		JButton undoButton = new JButton("Undo");
 		JButton doneButton = new JButton("Done");
 		
-		JButton mancalaAButton = new JButton("A");
-		mancalaAButton.setPreferredSize(new Dimension(50, 50));
-		JButton mancalaBButton = new JButton("B");
-		mancalaBButton.setPreferredSize(new Dimension(50, 50));
+		JLabel mancalaALabel = new JLabel(mancalaDrawing);
+		mancalaALabel.setPreferredSize(new Dimension(50, 200));
+		mancalaAPanel.add(mancalaALabel);
 		
-		
-	
-		
-		mancalaAPanel.add(mancalaAButton);
-		mancalaBPanel.add(mancalaBButton);
-
+		JLabel mancalaBLabel = new JLabel(mancalaDrawing);
+		mancalaBLabel.setPreferredSize(new Dimension(50, 200));
+		mancalaBPanel.add(mancalaBLabel);
 		
 
 		playerPanel.add(pitBPanel, BorderLayout.NORTH);
@@ -144,6 +177,9 @@ public class MancalaView extends JFrame {
 				int x = e.getX()/ICON_WIDTH;
 				int y = e.getY()/ICON_HEIGHT;
 				System.out.println(x + "," + y);
+				MancalaGameState.Pit pitEnum = convertPitLocationToEnum(x,y);
+				System.out.println("pitEnum: "+pitEnum);
+				repaint();
 			}
 		});
 		
@@ -159,6 +195,21 @@ public class MancalaView extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
+	}
+	
+	public MancalaGameState.Pit convertPitLocationToEnum(int x, int y)
+	{
+		MancalaGameState.Pit pit = null;
+		if(y == 2)
+		{
+			pit = MancalaGameState.Pit.valueOf("A"+(x+1));
+		}
+		else if(y == 1)
+		{
+			pit = MancalaGameState.Pit.valueOf("B"+(6-x));
+		}
+		return pit;
+		
 	}
 	
 }
