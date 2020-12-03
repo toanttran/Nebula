@@ -31,7 +31,7 @@ public class EarthBoardStyle implements BoardStyleManager {
 
 	@Override
 	public void drawStone(Graphics2D g2) {
-		Rectangle2D.Double stone = new Rectangle2D.Double(0, 0, 10, 10);
+		Rectangle2D.Double stone = new Rectangle2D.Double(0, 0, 8, 8);
 		g2.setColor(Color.blue);
 		stoneShape = stone;
 		g2.fill(stone);				

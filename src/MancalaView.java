@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -20,7 +22,6 @@ public class MancalaView extends JFrame {
 	private final int PIT_SIZE = 6; 
 	private BoardStyleManager board;
 	private MancalaGameState gameState;
-	private ArrayList<JButton> pitButtons;
 	private final int ICON_HEIGHT = 50;
 	private final int ICON_WIDTH = 50;
 	/**
@@ -32,9 +33,6 @@ public class MancalaView extends JFrame {
 	 */
 	public MancalaView(String boardStyle, int stoneNumber) {
 		
-
-		
-		pitButtons = new ArrayList<JButton>();
 		
 		gameState = new MancalaGameState(stoneNumber);
 		
@@ -118,11 +116,16 @@ public class MancalaView extends JFrame {
 			}
 		};
 
-
-
 		for(int i=0; i<PIT_SIZE; i++) {
 			JLabel pitLabel = new JLabel(pitDrawings);
+			pitLabel.setLayout(new GridLayout(3, 3));
 			pitLabel.setPreferredSize(new Dimension(50, 50));
+			for(int j=0; j<stoneNumber;j++)
+			{
+				JLabel stoneLabel = new JLabel(stoneDrawing);
+				stoneLabel.setPreferredSize(new Dimension(8,8));
+				pitLabel.add(stoneLabel);
+			}
 			pitAPanel.add(pitLabel);
 		}
 
@@ -146,7 +149,14 @@ public class MancalaView extends JFrame {
 
 		for(int i=0; i<PIT_SIZE; i++) {
 			JLabel pitLabel = new JLabel(pitDrawings);
+			pitLabel.setLayout(new GridLayout(3, 3));
 			pitLabel.setPreferredSize(new Dimension(50, 50));
+			for(int j=0; j<stoneNumber;j++)
+			{
+				JLabel stoneLabel = new JLabel(stoneDrawing);
+				stoneLabel.setPreferredSize(new Dimension(8,8));
+				pitLabel.add(stoneLabel);
+			}
 			pitBPanel.add(pitLabel);
 		}
 		
@@ -160,6 +170,13 @@ public class MancalaView extends JFrame {
 		//Buttons to layout
 		JButton undoButton = new JButton("Undo");
 		JButton doneButton = new JButton("Done");
+		
+		undoButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) {
+				gameState.undoLastMove();
+			}
+		});
 		
 		JLabel mancalaALabel = new JLabel(mancalaDrawing);
 		mancalaALabel.setPreferredSize(new Dimension(50, 200));

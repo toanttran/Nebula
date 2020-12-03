@@ -28,7 +28,7 @@ public class JupiterBoardStyle implements BoardStyleManager{
 
 	@Override
 	public void drawStone(Graphics2D g2) {
-		Ellipse2D.Double stone = new Ellipse2D.Double(0, 0, 10, 10);
+		Ellipse2D.Double stone = new Ellipse2D.Double(0, 0, 8, 8);
 		g2.setColor(Color.red);
 		stoneShape = stone;
 		g2.fill(stone);		
