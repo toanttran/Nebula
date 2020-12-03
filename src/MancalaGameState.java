@@ -71,6 +71,14 @@ public class MancalaGameState {
 	}
 	
 	/**
+	 * @return the whole mancalaboard data set
+	 */
+	public int[] getMancalaBoardData()
+	{
+		return mancalaBoard;
+	}
+	
+	/**
 	 * Takes the stones in a specified Pit of the Mancala board
 	 * and adds one to each consecutive pit after the specified Pit
 	 * (in counter-clockwise motion). If this is the first move in

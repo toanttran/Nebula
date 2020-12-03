@@ -18,13 +18,15 @@ import javax.swing.event.ChangeListener;
  * MancalaView acts as the view for the application
  *
  */
-public class MancalaView extends JFrame {
+public class MancalaView extends JFrame implements ChangeListener{
 	
 	private final int PIT_SIZE = 6; 
 	private BoardStyleManager board;
 	private MancalaGameState gameState;
 	private final int ICON_HEIGHT = 50;
 	private final int ICON_WIDTH = 50;
+	
+	private int[] mancalaBoard;
 	/**
 	 * 
 	 * @param boardStyle - the board style chosen from combo box
@@ -32,8 +34,8 @@ public class MancalaView extends JFrame {
 	 */
 	public MancalaView(String boardStyle, int stoneNumber) {
 		
-		
 		gameState = new MancalaGameState(stoneNumber);
+		mancalaBoard = gameState.getMancalaBoardData();
 		
 		JFrame frame = new JFrame(boardStyle + " Style Mancala Game");
 		
@@ -119,7 +121,7 @@ public class MancalaView extends JFrame {
 			JLabel pitLabel = new JLabel(pitDrawings);
 			pitLabel.setLayout(new GridLayout(3, 3));
 			pitLabel.setPreferredSize(new Dimension(50, 50));
-			for(int j=0; j<stoneNumber;j++)
+			for(int j=0; j<mancalaBoard[i];j++)
 			{
 				JLabel stoneLabel = new JLabel(stoneDrawing);
 				stoneLabel.setPreferredSize(new Dimension(8,8));
@@ -150,7 +152,7 @@ public class MancalaView extends JFrame {
 			JLabel pitLabel = new JLabel(pitDrawings);
 			pitLabel.setLayout(new GridLayout(3, 3));
 			pitLabel.setPreferredSize(new Dimension(50, 50));
-			for(int j=0; j<stoneNumber;j++)
+			for(int j=0; j<mancalaBoard[i];j++)
 			{
 				JLabel stoneLabel = new JLabel(stoneDrawing);
 				stoneLabel.setPreferredSize(new Dimension(8,8));
@@ -177,14 +179,28 @@ public class MancalaView extends JFrame {
 			}
 		});
 		
-		JLabel mancalaALabel = new JLabel(mancalaDrawing);
-		mancalaALabel.setPreferredSize(new Dimension(50, 200));
+		doneButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) {
+				gameState.changePlayers();
+			}
+		});
+		
+		
+		JLabel mancalaALabel = new JLabel("A");
+		mancalaALabel.setPreferredSize(new Dimension(10, 10));
+		JLabel mancalaA = new JLabel(mancalaDrawing);
+		mancalaA.setPreferredSize(new Dimension(50, 200));
+		mancalaAPanel.add(mancalaA);
 		mancalaAPanel.add(mancalaALabel);
 		
-		JLabel mancalaBLabel = new JLabel(mancalaDrawing);
-		mancalaBLabel.setPreferredSize(new Dimension(50, 200));
+		JLabel mancalaBLabel = new JLabel("B");
+		mancalaBLabel.setPreferredSize(new Dimension(10, 10));
+		JLabel mancalaB = new JLabel(mancalaDrawing);
+		mancalaB.setPreferredSize(new Dimension(50, 200));
 		mancalaBPanel.add(mancalaBLabel);
-		
+		mancalaBPanel.add(mancalaB);
+
 
 		playerPanel.add(pitBPanel, BorderLayout.NORTH);
 		playerPanel.add(pitAPanel, BorderLayout.CENTER);
@@ -195,6 +211,7 @@ public class MancalaView extends JFrame {
 				System.out.println(x + "," + y);
 				MancalaGameState.Pit pitEnum = convertPitLocationToEnum(x,y);
 				gameState.movePit(pitEnum);
+				//mancalaBoard = gameState.getMancalaBoardData();
 				System.out.println("pitEnum: "+pitEnum);
 				repaint();
 			}
@@ -232,6 +249,12 @@ public class MancalaView extends JFrame {
 		}
 		return pit;
 		
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		mancalaBoard = gameState.getMancalaBoardData();
+		repaint();
 	}
 	
 }
