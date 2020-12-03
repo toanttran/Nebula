@@ -5,6 +5,10 @@ import java.awt.Shape;
 import javax.swing.ImageIcon;
 
 
+/**
+ * @author Ye Sol, Toan
+ *
+ */
 public interface BoardStyleManager {
 	
 	void drawPit(Graphics2D g2);

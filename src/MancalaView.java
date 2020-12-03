@@ -15,6 +15,7 @@ import javax.swing.event.ChangeListener;
 /**
  * 
  * @author Toan & Ye Sol
+ * MancalaView acts as the view for the application
  *
  */
 public class MancalaView extends JFrame {
@@ -26,10 +27,8 @@ public class MancalaView extends JFrame {
 	private final int ICON_WIDTH = 50;
 	/**
 	 * 
-	 * @param boardStyle
-	 * @param stoneNumber
-	 * @param width
-	 * @param height
+	 * @param boardStyle - the board style chosen from combo box
+	 * @param stoneNumber - the number of stones chosen from combo box
 	 */
 	public MancalaView(String boardStyle, int stoneNumber) {
 		
@@ -195,6 +194,7 @@ public class MancalaView extends JFrame {
 				int y = e.getY()/ICON_HEIGHT;
 				System.out.println(x + "," + y);
 				MancalaGameState.Pit pitEnum = convertPitLocationToEnum(x,y);
+				gameState.movePit(pitEnum);
 				System.out.println("pitEnum: "+pitEnum);
 				repaint();
 			}
@@ -214,6 +214,11 @@ public class MancalaView extends JFrame {
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * @param x - x coordinate of pit
+	 * @param y - y coordinate of pit
+	 * @return the pit enum associated with the pit on screen
+	 */
 	public MancalaGameState.Pit convertPitLocationToEnum(int x, int y)
 	{
 		MancalaGameState.Pit pit = null;

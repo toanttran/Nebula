@@ -37,6 +37,7 @@ public class MancalaGameState {
 		lastBoard		= null;
 		currentPlayer	= null;
 		gameEnd			= false;
+		viewers 		= new ArrayList<ChangeListener>();
 	}
 	
 	/**
