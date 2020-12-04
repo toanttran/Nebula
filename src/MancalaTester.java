@@ -35,9 +35,9 @@ public class MancalaTester {
 		JComboBox chooseStoneNum = new JComboBox(stoneChoices);
 		JComboBox chooseBoardStyle = new JComboBox(boardChoices);
 		
-		MancalaGameState dataModel = new MancalaGameState(Integer.parseInt(chooseStoneNum.getSelectedItem().toString()));
 		
 		startGame.addActionListener(new ActionListener() {
+
 
 			@SuppressWarnings("unlikely-arg-type")
 			@Override
@@ -52,8 +52,11 @@ public class MancalaTester {
 					n = 4;
 				}
 				
-				String boardStyle = chooseBoardStyle.getSelectedItem().toString();
+				MancalaGameState dataModel = new MancalaGameState(n);
 
+				
+				String boardStyle = chooseBoardStyle.getSelectedItem().toString();
+				
 				MancalaView frame = new MancalaView(boardStyle, n, dataModel);
 				
 				dataModel.attach(frame);
