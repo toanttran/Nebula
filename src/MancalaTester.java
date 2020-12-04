@@ -35,6 +35,8 @@ public class MancalaTester {
 		JComboBox chooseStoneNum = new JComboBox(stoneChoices);
 		JComboBox chooseBoardStyle = new JComboBox(boardChoices);
 		
+		MancalaGameState dataModel = new MancalaGameState(Integer.parseInt(chooseStoneNum.getSelectedItem().toString()));
+		
 		startGame.addActionListener(new ActionListener() {
 
 			@SuppressWarnings("unlikely-arg-type")
@@ -52,7 +54,10 @@ public class MancalaTester {
 				
 				String boardStyle = chooseBoardStyle.getSelectedItem().toString();
 
-				JFrame frame = new MancalaView(boardStyle, n);
+				MancalaView frame = new MancalaView(boardStyle, n, dataModel);
+				
+				dataModel.attach(frame);
+				
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				
 				//need to close initialScreen after this button is activated.

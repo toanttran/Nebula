@@ -32,9 +32,9 @@ public class MancalaView extends JFrame implements ChangeListener{
 	 * @param boardStyle - the board style chosen from combo box
 	 * @param stoneNumber - the number of stones chosen from combo box
 	 */
-	public MancalaView(String boardStyle, int stoneNumber) {
+	public MancalaView(String boardStyle, int stoneNumber, MancalaGameState data) {
 		
-		gameState = new MancalaGameState(stoneNumber);
+		gameState = data;
 		mancalaBoard = gameState.getMancalaBoardData();
 		
 		JFrame frame = new JFrame(boardStyle + " Style Mancala Game");
