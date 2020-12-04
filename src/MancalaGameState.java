@@ -71,7 +71,8 @@ public class MancalaGameState {
 	}
 	
 	/**
-	 * @return the whole mancalaboard data set
+	 * Gets the Mancala Board as an Integer Array.
+	 * @return the whole Mancala Board data set
 	 */
 	public int[] getMancalaBoardData()
 	{
@@ -100,7 +101,7 @@ public class MancalaGameState {
 	public boolean movePit(Pit pos) {
 		// Do nothing if player chose a Mancala Pit
 		// or if the game has already ended
-		if(isMancalaPit(pos.getValue()) || gameEnd == true) {
+		if(pos == null || isMancalaPit(pos.getValue()) || gameEnd == true) {
 			return true;
 		}
 		
