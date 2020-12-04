@@ -14,6 +14,7 @@ public class MancalaGameState {
 	private int[] lastBoard;
 	private String currentPlayer;
 	private boolean gameEnd;
+	private boolean canMakeTurn;
 	
 	private ArrayList<ChangeListener> viewers;
 	
@@ -37,6 +38,7 @@ public class MancalaGameState {
 		lastBoard		= null;
 		currentPlayer	= null;
 		gameEnd			= false;
+		canMakeTurn		= true;
 		viewers 		= new ArrayList<ChangeListener>();
 	}
 	
@@ -80,6 +82,14 @@ public class MancalaGameState {
 	}
 	
 	/**
+	 * Checks if the current player can make a turn and select a pit.
+	 * @return true if the current player can make a turn, else false
+	 */
+	public boolean canPlayerMakeTurn() {
+		return canMakeTurn;
+	}
+	
+	/**
 	 * Takes the stones in a specified Pit of the Mancala board
 	 * and adds one to each consecutive pit after the specified Pit
 	 * (in counter-clockwise motion). If this is the first move in
@@ -98,11 +108,12 @@ public class MancalaGameState {
 	 * Mancala Pit, or if the selected pit either is empty or
 	 * is a Mancala Pit; else, false
 	 */
-	public boolean movePit(Pit pos) {
+	public void movePit(Pit pos) {
 		// Do nothing if player chose a Mancala Pit
 		// or if the game has already ended
-		if(pos == null || isMancalaPit(pos.getValue()) || gameEnd == true) {
-			return true;
+		if(	canMakeTurn == false || pos == null 
+			|| isMancalaPit(pos.getValue()) || gameEnd == true) {
+			return;
 		}
 		
 		// First turn
@@ -116,11 +127,9 @@ public class MancalaGameState {
 			
 			// Do nothing if the selected pit has no stones
 			if(stonesTaken <= 0) {
-				return true;
+				return;
 			}
 			
-			// Assume outcome will not give free turn
-			boolean freeTurn = false;
 			lastBoard = mancalaBoard.clone();
 		
 			// Loops through the board until stones in hand are empty
@@ -130,7 +139,7 @@ public class MancalaGameState {
 				if(i >= mancalaBoard.length)
 					i = 0;
 				
-				if(isNotOpponentPit(i, pos)) {
+				if(!isOpponentPit(i, pos)) {
 					mancalaBoard[i]++;
 					stonesTaken--;
 				}
@@ -140,7 +149,9 @@ public class MancalaGameState {
 			// all stones from that Pit and the Pit on the opposite side
 			// and place those stones in the player's Mancala Pit.
 			// Note: Always one stone on previously-empty Pit
-			if(mancalaBoard[i] == 1) {
+			if( mancalaBoard[i] == 1 &&
+				pos.getPlayer().equals(currentPlayer))
+			{
 				int oppPos = Pit.B_START.getValue() - 1 - i;
 				int capturedStones = mancalaBoard[oppPos] + 1;
 				if(pos.getPlayer().equals("A")) {
@@ -154,20 +165,19 @@ public class MancalaGameState {
 			}
 			
 			// If last stone lands on player's Mancala pit, get a free turn
-			if(isMancalaPit(i)) {
-				freeTurn = true;
-			}
+			if(isMancalaPit(i))
+				canMakeTurn = true;
+			else
+				canMakeTurn = false;
 			
 			if(isGameFinished()) {
 				gameEnd = true;
-				freeTurn = false;
+				canMakeTurn = false;
 			}
 			
 			// Mutation of board is done, so notify any viewers
 			notifyViewers();
-			return freeTurn;
-		} // Opponent pit is picked
-		else return true;
+		}
 	}
 	
 	/**
@@ -178,6 +188,7 @@ public class MancalaGameState {
 		if(lastBoard != null && !gameEnd) {
 			mancalaBoard = lastBoard;
 			lastBoard = null;
+			canMakeTurn = true;
 			notifyViewers();
 		}
 	}
@@ -193,6 +204,7 @@ public class MancalaGameState {
 				currentPlayer = "B";
 			else if(currentPlayer.equals("B"))
 				currentPlayer = "A";
+			canMakeTurn = true;
 		}
 	}
 	
@@ -247,7 +259,7 @@ public class MancalaGameState {
 	// Checks if the int position is the opponent's Mancala
 	// pit.
 	// returns true if position is the opponent's Mancala pit, else false
-	private boolean isNotOpponentPit(int i, Pit playerPit) {
+	private boolean isOpponentPit(int i, Pit playerPit) {
 		return ((playerPit.getPlayer().equals("A") && i == Pit.B_START.getValue()) ||
 				(playerPit.getPlayer().equals("B") && i == Pit.A_START.getValue()));
 	}
