@@ -63,11 +63,23 @@ public class MancalaGameState {
 	
 	/**
 	 * Gets the winner of the Mancala Board if the game has ended
-	 * @return The String representation of the winning player.
+	 * @return The String representation of the winning player,
+	 * "TIE" if both players have same number of stones, or null
+	 * if game has not yet ended.
 	 */
 	public String getGameWinner() {
-		if(gameEnd)
-			return currentPlayer;
+		if(gameEnd) {
+			int mancalaA = mancalaBoard[Pit.A_START.getValue()];
+			int mancalaB = mancalaBoard[Pit.B_START.getValue()];
+			if(mancalaA > mancalaB) {
+				return "A";
+			}
+			else if(mancalaB > mancalaA) {
+				return "B";
+			}
+			else
+				return "TIE";
+		}
 		else
 			return null;
 	}
