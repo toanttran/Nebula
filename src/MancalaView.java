@@ -45,6 +45,8 @@ public class MancalaView extends JFrame implements ChangeListener{
 		JPanel mancalaAPanel = new JPanel();
 		JPanel mancalaBPanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
+		pitAPanel pitAPanel = new pitAPanel();
+		pitBPanel pitBPanel = new pitBPanel();
 		
 		JPanel playerPanel = new JPanel();
 		playerPanel.setPreferredSize(new Dimension(300,200));
@@ -88,9 +90,12 @@ public class MancalaView extends JFrame implements ChangeListener{
 				gameState.movePit(pitEnum);
 				//mancalaBoard = gameState.getMancalaBoardData();
 				System.out.println("pitEnum: "+pitEnum);
+				mancalaBoard = gameState.getMancalaBoardData();
 				repaint();
+				
 			}
 		});
+		
 		
 		Icon mancalaDrawing = new mancalaIcon();
 		
@@ -113,13 +118,13 @@ public class MancalaView extends JFrame implements ChangeListener{
 		buttonPanel.add(undoButton);
 		buttonPanel.add(doneButton);
 		
-		//add a and b pits in one pit
-		playerPanel.add(new pitBPanel(), BorderLayout.NORTH);
-		playerPanel.add(new pitAPanel(), BorderLayout.CENTER);
+		//add a and b pits in one panel
+		playerPanel.add(pitBPanel, BorderLayout.NORTH);
+		playerPanel.add(pitAPanel, BorderLayout.CENTER);
 		playerPanel.setBackground(board.getColor());
 		playerPanel.setOpaque(true);
 		
-		//add all the panels into the jframe
+		//add all the panels into pit
 		this.add(mancalaAPanel, BorderLayout.EAST);
 		this.add(mancalaBPanel, BorderLayout.WEST);
 		this.add(playerPanel, BorderLayout.CENTER);
@@ -129,12 +134,23 @@ public class MancalaView extends JFrame implements ChangeListener{
 		this.setVisible(true);
 	}
 	
+	/**
+	 * @author Ye Sol
+	 * Represents the pits
+	 *
+	 */
 	private class pitIcon implements Icon{
 
+		/**
+		 * unused method, needed because implementing icon
+		 */
 		public int getIconWidth() {
 			return ICON_WIDTH;
 		}
 
+		/**
+		 * paints the pits
+		 */
 		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			Graphics2D g2 = (Graphics2D) g;
@@ -142,6 +158,9 @@ public class MancalaView extends JFrame implements ChangeListener{
 			
 		}
 
+		/**
+		 * unused method, needed because implementing icon
+		 */
 		@Override
 		public int getIconHeight() {
 			return ICON_HEIGHT;
@@ -149,12 +168,23 @@ public class MancalaView extends JFrame implements ChangeListener{
 		
 	}
 	
+	/**
+	 * @author Ye Sol
+	 * Represents the mancalas
+	 *
+	 */
 	private class mancalaIcon implements Icon{
 
+		/**
+		 * unused method, needed because implementing icon
+		 */
 		public int getIconWidth() {
 			return 0;
 		}
 
+		/**
+		 * paints the mancalas
+		 */
 		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			Graphics2D g2 = (Graphics2D) g;
@@ -162,18 +192,32 @@ public class MancalaView extends JFrame implements ChangeListener{
 			
 		}
 
+		/**
+		 * unused method, needed because implementing icon
+		 */
 		@Override
 		public int getIconHeight() {
 			return 0;
 		}
 	}
 	
+	/**
+	 * @author Ye Sol
+	 * Represents the stones
+	 *
+	 */
 	private class stoneIcon implements Icon{
 
+		/**
+		 * unused method, needed because implementing icon
+		 */
 		public int getIconWidth() {
 			return 0;
 		}
 
+		/**
+		 * paints the stones
+		 */
 		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			Graphics2D g2 = (Graphics2D) g;
@@ -181,14 +225,26 @@ public class MancalaView extends JFrame implements ChangeListener{
 			
 		}
 
+		/**
+		 * unused method, needed because implementing icon
+		 */
 		@Override
 		public int getIconHeight() {
 			return 0;
 		}
 	}
 	
+	/**
+	 * @author Ye Sol
+	 * Represents the pitAPanel
+	 *
+	 */
 	private class pitAPanel extends JPanel
 	{
+		/**
+		 * param g = graphics class
+		 * overrides the paintcomponent to repaint the panel after clicking pit
+		 */
 		@Override
 		public void paintComponent(Graphics g)
 		{
@@ -222,7 +278,16 @@ public class MancalaView extends JFrame implements ChangeListener{
 		}
 	}
 	
+	/**
+	 * @author Ye Sol
+	 * Represents the pitBPanel
+	 *
+	 */
 	private class pitBPanel extends JPanel{
+		/**
+		 * param g = graphics class
+		 * overrides the paintcomponent to repaint the panel after clicking pit
+		 */
 		@Override
 		public void paintComponent(Graphics g)
 		{
@@ -279,6 +344,9 @@ public class MancalaView extends JFrame implements ChangeListener{
 		
 	}
 
+	/**
+	 * gets the changed info from data model
+	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		mancalaBoard = gameState.getMancalaBoardData();
