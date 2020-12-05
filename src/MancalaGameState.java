@@ -139,18 +139,19 @@ public class MancalaGameState {
 				if(i >= mancalaBoard.length)
 					i = 0;
 				
-				if(!isOpponentPit(i, pos)) {
+				if(!isOpponentMancalaPit(i, pos)) {
 					mancalaBoard[i]++;
 					stonesTaken--;
 				}
 			}
 			
-			// If last stone lands on empty Pit of the player, steal
-			// all stones from that Pit and the Pit on the opposite side
-			// and place those stones in the player's Mancala Pit.
+			// If last stone lands on empty non-Mancala Pit of the player,
+			// steal all stones from that Pit and the Pit on the opposite
+			//side and place those stones in the player's Mancala Pit.
 			// Note: Always one stone on previously-empty Pit
 			if( mancalaBoard[i] == 1 &&
-				pos.getPlayer().equals(currentPlayer))
+				currentPlayer.equals(pos.getPlayer()) &&
+				!isMancalaPit(i))
 			{
 				int oppPos = Pit.B_START.getValue() - 1 - i;
 				int capturedStones = mancalaBoard[oppPos] + 1;
@@ -259,7 +260,7 @@ public class MancalaGameState {
 	// Checks if the int position is the opponent's Mancala
 	// pit.
 	// returns true if position is the opponent's Mancala pit, else false
-	private boolean isOpponentPit(int i, Pit playerPit) {
+	private boolean isOpponentMancalaPit(int i, Pit playerPit) {
 		return ((playerPit.getPlayer().equals("A") && i == Pit.B_START.getValue()) ||
 				(playerPit.getPlayer().equals("B") && i == Pit.A_START.getValue()));
 	}
