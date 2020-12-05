@@ -37,9 +37,9 @@ public class MancalaView extends JFrame implements ChangeListener{
 		gameState = data;
 		mancalaBoard = gameState.getMancalaBoardData();
 		
-		JFrame frame = new JFrame(boardStyle + " Style Mancala Game");
+		this.setTitle(boardStyle + " Style Mancala Game");
 		
-		frame.setLayout(new BorderLayout());
+		this.setLayout(new BorderLayout());
 		
 		//Panels to layout
 		JPanel mancalaAPanel = new JPanel();
@@ -47,7 +47,7 @@ public class MancalaView extends JFrame implements ChangeListener{
 		JPanel buttonPanel = new JPanel();
 		
 		JPanel playerPanel = new JPanel();
-		playerPanel.setLayout( new BorderLayout());
+		playerPanel.setPreferredSize(new Dimension(300,200));
 		
 		
 		if(boardStyle.equals("EarthBoard"))
@@ -58,115 +58,6 @@ public class MancalaView extends JFrame implements ChangeListener{
 		{
 			board = new JupiterBoardStyle();
 		}
-		
-		JPanel pitAPanel = new JPanel();
-		pitAPanel.setLayout(new GridLayout(2,6));
-		
-
-		Icon pitDrawings = new Icon() {
-			public int getIconWidth() {
-				return ICON_WIDTH;
-			}
-
-			@Override
-			public void paintIcon(Component c, Graphics g, int x, int y) {
-				Graphics2D g2 = (Graphics2D) g;
-				board.drawPit(g2);
-				
-			}
-
-			@Override
-			public int getIconHeight() {
-				return ICON_HEIGHT;
-			}
-		};
-		
-		Icon mancalaDrawing = new Icon() {
-			public int getIconWidth() {
-				return 0;
-			}
-
-			@Override
-			public void paintIcon(Component c, Graphics g, int x, int y) {
-				Graphics2D g2 = (Graphics2D) g;
-				board.drawMancala(g2);
-				
-			}
-
-			@Override
-			public int getIconHeight() {
-				return 0;
-			}
-		};
-		
-		Icon stoneDrawing = new Icon() {
-			public int getIconWidth() {
-				return 0;
-			}
-
-			@Override
-			public void paintIcon(Component c, Graphics g, int x, int y) {
-				Graphics2D g2 = (Graphics2D) g;
-				board.drawStone(g2);
-				
-			}
-
-			@Override
-			public int getIconHeight() {
-				return 0;
-			}
-		};
-
-		for(int i=0; i<PIT_SIZE; i++) {
-			JLabel pitLabel = new JLabel(pitDrawings);
-			pitLabel.setLayout(new GridLayout(3, 3));
-			pitLabel.setPreferredSize(new Dimension(50, 50));
-			for(int j=0; j<mancalaBoard[i];j++)
-			{
-				JLabel stoneLabel = new JLabel(stoneDrawing);
-				stoneLabel.setPreferredSize(new Dimension(8,8));
-				pitLabel.add(stoneLabel);
-			}
-			pitAPanel.add(pitLabel);
-		}
-
-		MancalaGameState.Pit[] pits = MancalaGameState.Pit.values();
-		for(int i=0; i<pits.length/2-1;i++)
-		{
-			JLabel label = new JLabel(""+pits[i], SwingConstants.CENTER);
-			label.setPreferredSize(new Dimension(50, 5));
-			pitAPanel.add(label);
-		}
-		
-		JPanel pitBPanel = new JPanel();
-		pitBPanel.setLayout(new GridLayout(2,6));
-		
-		for(int i=pits.length-2; i>=pits.length/2;i--)
-		{
-			JLabel label = new JLabel(""+pits[i],SwingConstants.CENTER);
-			label.setPreferredSize(new Dimension(50, 5));
-			pitBPanel.add(label);
-		}
-
-		for(int i=0; i<PIT_SIZE; i++) {
-			JLabel pitLabel = new JLabel(pitDrawings);
-			pitLabel.setLayout(new GridLayout(3, 3));
-			pitLabel.setPreferredSize(new Dimension(50, 50));
-			for(int j=0; j<mancalaBoard[i];j++)
-			{
-				JLabel stoneLabel = new JLabel(stoneDrawing);
-				stoneLabel.setPreferredSize(new Dimension(8,8));
-				pitLabel.add(stoneLabel);
-			}
-			pitBPanel.add(pitLabel);
-		}
-		
-		
-		pitAPanel.setBackground(board.getColor());
-		pitBPanel.setBackground(board.getColor());
-		playerPanel.setOpaque(true);
-
-		
 		
 		//Buttons to layout
 		JButton undoButton = new JButton("Undo");
@@ -187,6 +78,23 @@ public class MancalaView extends JFrame implements ChangeListener{
 		});
 		
 		
+		//add mouse listener to pits
+		playerPanel.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				int x = e.getX()/ICON_WIDTH;
+				int y = e.getY()/ICON_HEIGHT;
+				System.out.println(x + "," + y);
+				MancalaGameState.Pit pitEnum = convertPitLocationToEnum(x,y);
+				gameState.movePit(pitEnum);
+				//mancalaBoard = gameState.getMancalaBoardData();
+				System.out.println("pitEnum: "+pitEnum);
+				repaint();
+			}
+		});
+		
+		Icon mancalaDrawing = new mancalaIcon();
+		
+		//draw the side mancala pits and label
 		JLabel mancalaALabel = new JLabel("A");
 		mancalaALabel.setPreferredSize(new Dimension(10, 10));
 		JLabel mancalaA = new JLabel(mancalaDrawing);
@@ -201,34 +109,154 @@ public class MancalaView extends JFrame implements ChangeListener{
 		mancalaBPanel.add(mancalaBLabel);
 		mancalaBPanel.add(mancalaB);
 
-
-		playerPanel.add(pitBPanel, BorderLayout.NORTH);
-		playerPanel.add(pitAPanel, BorderLayout.CENTER);
-		playerPanel.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				int x = e.getX()/ICON_WIDTH;
-				int y = e.getY()/ICON_HEIGHT;
-				System.out.println(x + "," + y);
-				MancalaGameState.Pit pitEnum = convertPitLocationToEnum(x,y);
-				gameState.movePit(pitEnum);
-				//mancalaBoard = gameState.getMancalaBoardData();
-				System.out.println("pitEnum: "+pitEnum);
-				repaint();
-			}
-		});
-		
-
-		
+		//add buttons to panel
 		buttonPanel.add(undoButton);
 		buttonPanel.add(doneButton);
 		
-		frame.add(mancalaAPanel, BorderLayout.EAST);
-		frame.add(mancalaBPanel, BorderLayout.WEST);
-		frame.add(playerPanel, BorderLayout.CENTER);
-		frame.add(buttonPanel, BorderLayout.SOUTH);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);
+		//add a and b pits in one pit
+		playerPanel.add(new pitBPanel(), BorderLayout.NORTH);
+		playerPanel.add(new pitAPanel(), BorderLayout.CENTER);
+		playerPanel.setBackground(board.getColor());
+		playerPanel.setOpaque(true);
+		
+		//add all the panels into the jframe
+		this.add(mancalaAPanel, BorderLayout.EAST);
+		this.add(mancalaBPanel, BorderLayout.WEST);
+		this.add(playerPanel, BorderLayout.CENTER);
+		this.add(buttonPanel, BorderLayout.SOUTH);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.pack();
+		this.setVisible(true);
+	}
+	
+	private class pitIcon implements Icon{
+
+		public int getIconWidth() {
+			return ICON_WIDTH;
+		}
+
+		@Override
+		public void paintIcon(Component c, Graphics g, int x, int y) {
+			Graphics2D g2 = (Graphics2D) g;
+			board.drawPit(g2);
+			
+		}
+
+		@Override
+		public int getIconHeight() {
+			return ICON_HEIGHT;
+		}
+		
+	}
+	
+	private class mancalaIcon implements Icon{
+
+		public int getIconWidth() {
+			return 0;
+		}
+
+		@Override
+		public void paintIcon(Component c, Graphics g, int x, int y) {
+			Graphics2D g2 = (Graphics2D) g;
+			board.drawMancala(g2);
+			
+		}
+
+		@Override
+		public int getIconHeight() {
+			return 0;
+		}
+	}
+	
+	private class stoneIcon implements Icon{
+
+		public int getIconWidth() {
+			return 0;
+		}
+
+		@Override
+		public void paintIcon(Component c, Graphics g, int x, int y) {
+			Graphics2D g2 = (Graphics2D) g;
+			board.drawStone(g2);
+			
+		}
+
+		@Override
+		public int getIconHeight() {
+			return 0;
+		}
+	}
+	
+	private class pitAPanel extends JPanel
+	{
+		@Override
+		public void paintComponent(Graphics g)
+		{
+			//JPanel pitAPanel = new JPanel();
+			this.setLayout(new GridLayout(2,6));
+
+			Icon pitDrawings = new pitIcon();
+			Icon stoneDrawing = new stoneIcon();
+
+			for(int i=0; i<PIT_SIZE; i++) {
+				JLabel pitLabel = new JLabel(pitDrawings);
+				pitLabel.setLayout(new GridLayout(3, 3));
+				pitLabel.setPreferredSize(new Dimension(50, 50));
+				for(int j=0; j<mancalaBoard[i];j++)
+				{
+					JLabel stoneLabel = new JLabel(stoneDrawing);
+					stoneLabel.setPreferredSize(new Dimension(8,8));
+					pitLabel.add(stoneLabel);
+				}
+				this.add(pitLabel);
+			}
+			
+			MancalaGameState.Pit[] pits = MancalaGameState.Pit.values();
+			for(int i=0; i<pits.length/2-1;i++)
+			{
+				JLabel label = new JLabel(""+pits[i], SwingConstants.CENTER);
+				label.setPreferredSize(new Dimension(50, 5));
+				this.add(label);
+			}
+			
+		}
+	}
+	
+	private class pitBPanel extends JPanel{
+		@Override
+		public void paintComponent(Graphics g)
+		{
+			MancalaGameState.Pit[] pits = MancalaGameState.Pit.values();
+			
+			Icon pitDrawings = new pitIcon();
+			Icon stoneDrawing = new stoneIcon();
+			
+			//JPanel pitBPanel = new JPanel();
+			this.setLayout(new GridLayout(2,6));
+			
+			for(int i=pits.length-2; i>=pits.length/2;i--)
+			{
+				JLabel label = new JLabel(""+pits[i],SwingConstants.CENTER);
+				label.setPreferredSize(new Dimension(50, 5));
+				this.add(label);
+			}
+
+			for(int i=0; i<PIT_SIZE; i++) {
+				JLabel pitLabel = new JLabel(pitDrawings);
+				pitLabel.setLayout(new GridLayout(3, 3));
+				pitLabel.setPreferredSize(new Dimension(50, 50));
+				for(int j=0; j<mancalaBoard[i];j++)
+				{
+					JLabel stoneLabel = new JLabel(stoneDrawing);
+					stoneLabel.setPreferredSize(new Dimension(8,8));
+					pitLabel.add(stoneLabel);
+				}
+				this.add(pitLabel);
+			}
+			
+
+		}
+		
 	}
 	
 	/**
