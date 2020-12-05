@@ -5,7 +5,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
 /**
- * @author Ye Sol 
+ * @author Ye Sol, Toan
  * JupiterBoardStyle represents one concrete board style
  *
  */

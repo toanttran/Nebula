@@ -6,12 +6,20 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.ImageIcon;
 
+/**
+ * @author Toan, Ye Sol
+ * EarthBoardStyle represents one concrete board style
+ *
+ */
 public class EarthBoardStyle implements BoardStyleManager {
 	
 	private Shape pitShape;
 	private Shape stoneShape;
 
 
+	/**
+	 * draws the pits in the middle
+	 */
 	@Override
 	public void drawPit(Graphics2D g2) {
 		Ellipse2D.Double pit = new Ellipse2D.Double(0,0,50,50);
@@ -19,16 +27,25 @@ public class EarthBoardStyle implements BoardStyleManager {
 		g2.draw(pit);		
 	}
 
+	/**
+	 * returns the color of the board
+	 */
 	@Override
 	public Color getColor() {
 		return Color.GREEN;
 	}
 
+	/**
+	 * returns the shape of the board
+	 */
 	@Override
 	public Shape getShape() {
 		return pitShape;
 	}
 
+	/**
+	 * draws stones
+	 */
 	@Override
 	public void drawStone(Graphics2D g2) {
 		Rectangle2D.Double stone = new Rectangle2D.Double(0, 0, 8, 8);
@@ -37,11 +54,17 @@ public class EarthBoardStyle implements BoardStyleManager {
 		g2.fill(stone);				
 	}
 
+	/**
+	 * returns the shape of the stones
+	 */
 	@Override
 	public Shape getStone() {
 		return stoneShape;
 	}
 
+	/**
+	 * draws the mancala pits that are on the sides
+	 */
 	@Override
 	public void drawMancala(Graphics2D g2) {
 		Ellipse2D.Double mancala = new Ellipse2D.Double(0, 0, 50, 200);		
