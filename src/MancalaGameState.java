@@ -22,7 +22,7 @@ public class MancalaGameState {
 	
 	/**
 	 * Creates an empty MancalaGameState with a specified
-	 * number of stones already placed in all non-starting
+	 * number of stones already placed in all non-Mancala
 	 * pits
 	 * @param numOfStones the initial number of stones to place
 	 * in each pit
@@ -132,8 +132,10 @@ public class MancalaGameState {
 			
 			lastBoard = mancalaBoard.clone();
 		
-			// Loops through the board until stones in hand are empty
+			// Takes away all stones in selected Pit and
+			// loops through the board until stones in hand are empty
 			int i = pos.getValue();
+			mancalaBoard[i] = 0;
 			while(stonesTaken > 0) {
 				i++;
 				if(i >= mancalaBoard.length)
@@ -153,16 +155,16 @@ public class MancalaGameState {
 				currentPlayer.equals(pos.getPlayer()) &&
 				!isMancalaPit(i))
 			{
-				int oppPos = Pit.B_START.getValue() - 1 - i;
-				int capturedStones = mancalaBoard[oppPos] + 1;
+				int oppPos			= Pit.B_START.getValue() - 1 - i;
+				int capturedStones	= mancalaBoard[oppPos] + 1;
 				if(pos.getPlayer().equals("A")) {
-					mancalaBoard[Pit.A_START.getValue()] = capturedStones;
+					mancalaBoard[Pit.A_START.getValue()] += capturedStones;
 				}
 				else {
-					mancalaBoard[Pit.B_START.getValue()] = capturedStones;
+					mancalaBoard[Pit.B_START.getValue()] += capturedStones;
 				}
-				mancalaBoard[oppPos] = 0;
-				mancalaBoard[i] = 0;
+				mancalaBoard[oppPos]	= 0;
+				mancalaBoard[i]			= 0;
 			}
 			
 			// If last stone lands on player's Mancala pit, get a free turn
@@ -172,7 +174,7 @@ public class MancalaGameState {
 				canMakeTurn = false;
 			
 			if(isGameFinished()) {
-				gameEnd = true;
+				gameEnd		= true;
 				canMakeTurn = false;
 			}
 			
@@ -228,24 +230,45 @@ public class MancalaGameState {
 	// of the Mancala Board is empty, and place the remaining
 	// stones to the Mancala Pit of the player with those stones.
 	private boolean isGameFinished() {
-		boolean gameOverA = true;
-		int aStart	= Pit.A1.getValue();
-		int aEnd	= Pit.A_START.getValue();
+		// Assume A has no stones left in their side
+		boolean gameOverA	= true;
+		int aStart			= Pit.A1.getValue();
+		int aEnd			= Pit.A_START.getValue();
 		for(int i = aStart; i < aEnd && gameOverA; i++) {
-			if(mancalaBoard[i] != 0)
+			if(mancalaBoard[i] != 0) // Assumption is false
 				gameOverA = false;
 		}
 		
-		boolean gameOverB = true;
-		int bStart	= Pit.B1.getValue();
-		int bEnd	= Pit.B_START.getValue();
+		// Assume B has no stones left in their side
+		boolean gameOverB	= true;
+		int bStart			= Pit.B1.getValue();
+		int bEnd			= Pit.B_START.getValue();
 		for(int i = bStart; i < bEnd && gameOverB; i++) {
-			if(mancalaBoard[i] != 0)
+			if(mancalaBoard[i] != 0) // Assumption is false
 				gameOverB = false;
 		}
 		
-		if(gameOverA || gameOverB)
+		// If either A or B run out of stones in their side, the
+		// opposite player with remaining stones captures them to 
+		// their own MancalaPit.
+		if(gameOverA) {
+			int remainingStones = 0;
+			for(int i = bStart; i < bEnd; i++) {
+				remainingStones += mancalaBoard[i];
+				mancalaBoard[i] = 0;
+			}
+			mancalaBoard[Pit.B_START.getValue()] += remainingStones;
 			return true;
+		}
+		else if(gameOverB) {
+			int remainingStones = 0;
+			for(int i = aStart; i < aEnd; i++) {
+				remainingStones += mancalaBoard[i];
+				mancalaBoard[i] = 0;
+			}
+			mancalaBoard[Pit.A_START.getValue()] += remainingStones;
+			return true;
+		}
 		else
 			return false;
 	}
