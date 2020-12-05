@@ -133,7 +133,7 @@ public class MancalaGameState {
 			lastBoard = mancalaBoard.clone();
 		
 			// Loops through the board until stones in hand are empty
-			int i = pos.getValue() - 1;
+			int i = pos.getValue();
 			while(stonesTaken > 0) {
 				i++;
 				if(i >= mancalaBoard.length)
