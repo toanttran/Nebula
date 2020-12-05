@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 
 /**
  * @author Ye Sol, Toan
+ * General boardstyle that has required methods that the concrete board styles need to implement
  *
  */
 public interface BoardStyleManager {
